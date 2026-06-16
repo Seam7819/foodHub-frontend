@@ -45,7 +45,17 @@ const LoginPage = () => {
 
         setUser(res.user);
 
-        router.push("/");
+        if (res.user.role === "ADMIN") {
+          router.push("/admin");
+        } else if (
+          res.user.role === "PROVIDER"
+        ) {
+          router.push(
+            "/provider/dashboard"
+          );
+        } else {
+          router.push("/profile");
+        }
       } catch (error: any) {
         console.log(
           "FULL ERROR:",

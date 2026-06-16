@@ -1,11 +1,25 @@
-import axiosInstance from "../lib/axiosInstance";
+import axiosInstance from "@/src/lib/axiosInstance";
 
-export const getMeals =
-  async () => {
-    const { data } =
+export const getMeals = async (
+  params?: Record<string, any>
+) => {
+  const res =
+    await axiosInstance.get(
+      "/meals",
+      {
+        params,
+      }
+    );
+
+  return res.data;
+};
+
+export const getSingleMeal =
+  async (id: string) => {
+    const res =
       await axiosInstance.get(
-        "/meals"
+        `/meals/${id}`
       );
 
-    return data;
+    return res.data;
   };

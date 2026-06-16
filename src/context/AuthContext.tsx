@@ -12,6 +12,7 @@ import { getMyProfile } from "../services/auth.service";
 interface AuthContextType {
   user: any;
   loading: boolean;
+  setUser: React.Dispatch<any>;
   logout: () => void;
 }
 
@@ -77,6 +78,7 @@ export const AuthProvider = ({
       value={{
         user,
         loading,
+        setUser,
         logout,
       }}
     >

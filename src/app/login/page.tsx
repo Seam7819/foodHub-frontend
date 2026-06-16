@@ -4,9 +4,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { loginUser } from "@/src/services/auth.service";
+import { useAuth } from "@/src/context/AuthContext";
 
 const LoginPage = () => {
   const router = useRouter();
+  const { setUser } = useAuth();
+
+
 
   const [form, setForm] =
     useState({
@@ -22,27 +26,38 @@ const LoginPage = () => {
 
       try {
         const res =
-          await loginUser(
-            form
-          );
+          await loginUser(form);
 
         localStorage.setItem(
           "accessToken",
-          res.data.accessToken
+          res.accessToken
         );
 
         localStorage.setItem(
           "refreshToken",
-          res.data.refreshToken
+          res.refreshToken
         );
+
 
         toast.success(
           "Login successful"
         );
 
+        setUser(res.user);
+
         router.push("/");
-      } catch {
+      } catch (error: any) {
+        console.log(
+          "FULL ERROR:",
+          JSON.stringify(
+            error?.response?.data,
+            null,
+            2
+          )
+        );
+
         toast.error(
+          error?.response?.data?.message ||
           "Login failed"
         );
       }

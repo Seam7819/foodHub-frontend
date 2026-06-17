@@ -19,6 +19,7 @@ export default function CartPage() {
   const { user } = useAuth();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
@@ -91,8 +92,16 @@ export default function CartPage() {
     setIsSubmitting(true);
 
     try {
-      if (!deliveryAddress.trim()) {
-        toast.error("Please enter a delivery address.");
+      const address = deliveryAddress.trim();
+
+      if (!address) {
+        setValidationError("Please enter a delivery address.");
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (address.length < 5) {
+        setValidationError("Delivery address is too short. Please provide at least 5 characters.");
         setIsSubmitting(false);
         return;
       }
@@ -107,7 +116,7 @@ export default function CartPage() {
       }
 
       const payload = {
-        deliveryAddress: deliveryAddress.trim(),
+        deliveryAddress: address,
       };
 
       await createOrder(payload);
@@ -241,6 +250,29 @@ export default function CartPage() {
                   {isSubmitting ? "Processing..." : "Checkout"}
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {validationError && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
+          <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl ring-1 ring-black/5">
+            <div className="mb-4 text-center">
+              <p className="text-lg font-semibold text-slate-900">Validation Error</p>
+              <p className="mt-2 text-sm text-gray-600">Please update the delivery address before checkout.</p>
+            </div>
+            <div className="rounded-2xl border border-orange-200 bg-orange-50 p-4 text-sm text-orange-700">
+              {validationError}
+            </div>
+            <div className="mt-6 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setValidationError(null)}
+                className="rounded bg-orange-500 px-4 py-2 text-white"
+              >
+                Close
+              </button>
             </div>
           </div>
         </div>

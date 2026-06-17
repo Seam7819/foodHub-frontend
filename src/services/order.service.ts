@@ -5,6 +5,11 @@ export const createOrder = async (payload: any) => {
   return res.data;
 };
 
+export const getMyOrders = async () => {
+  const res = await axiosInstance.get("/orders");
+  return res.data;
+};
+
 export const getOrders = async () => {
   const res = await axiosInstance.get("/orders");
   return res.data;

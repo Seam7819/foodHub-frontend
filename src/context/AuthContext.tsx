@@ -7,6 +7,8 @@ import {
   useState,
 } from "react";
 import { getMyProfile } from "../services/auth.service";
+import { clearCart } from "@/src/utils/cart";
+import { clearWishlist } from "@/src/services/wishlist.service";
 
 
 interface AuthContextType {
@@ -62,15 +64,19 @@ export const AuthProvider = ({
   }, []);
 
   const logout = () => {
-    localStorage.removeItem(
-      "accessToken"
-    );
+    if (user?.id) {
+      clearCart(user.id);
+      clearWishlist(user.id);
+    }
 
-    localStorage.removeItem(
-      "refreshToken"
-    );
+    localStorage.removeItem("foodhub_cart");
+    localStorage.removeItem("foodhub_wishlist");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("role");
 
     setUser(null);
+    window.location.href = "/login";
   };
 
   return (

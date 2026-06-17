@@ -8,8 +8,7 @@ export interface IMeal {
   image?: string;
 
   price: number;
-
   averageRating: number;
-
   reviewCount: number;
+  categoryName?: string;
 }

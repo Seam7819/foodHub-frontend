@@ -38,6 +38,10 @@ const LoginPage = () => {
           res.refreshToken
         );
 
+        localStorage.setItem(
+          "role",
+          res.user.role
+        );
 
         toast.success(
           "Login successful"

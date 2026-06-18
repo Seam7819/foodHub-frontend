@@ -14,3 +14,8 @@ export const getOrders = async () => {
   const res = await axiosInstance.get("/orders");
   return res.data;
 };
+
+export const cancelOrder = async (id: string) => {
+  const res = await axiosInstance.patch(`/orders/cancel/${id}`);
+  return res.data;
+};

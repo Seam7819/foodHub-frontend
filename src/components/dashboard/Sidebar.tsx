@@ -21,11 +21,6 @@ export default function Sidebar() {
           </Link>
         </li>
         <li>
-          <Link href="/admin/meals" className="block rounded-md px-3 py-2 hover:bg-gray-100">
-            Meals
-          </Link>
-        </li>
-        <li>
           <Link href="/admin/orders" className="block rounded-md px-3 py-2 hover:bg-gray-100">
             Orders
           </Link>

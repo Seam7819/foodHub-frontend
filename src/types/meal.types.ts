@@ -11,4 +11,10 @@ export interface IMeal {
   averageRating: number;
   reviewCount: number;
   categoryName?: string;
+  provider?: {
+    id: string;
+    userId?: string;
+    businessName?: string;
+    name?: string;
+  };
 }

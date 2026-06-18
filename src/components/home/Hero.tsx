@@ -1,37 +1,64 @@
 import Link from "next/link";
 
 const Hero = () => {
+  // Sample carousel data
+  const carouselItems = [
+    {
+      id: "1",
+      image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1200&h=400&fit=crop",
+      title: "Discover Delicious Meals",
+      description: "Browse meals from trusted providers and enjoy food at your doorstep.",
+      link: "/meals",
+    },
+    {
+      id: "2",
+      image: "https://images.unsplash.com/photo-1504674900923-c6c1f2b28e45?w=1200&h=400&fit=crop",
+      title: "Premium Food Delivery",
+      description: "Fast and reliable delivery service with fresh, hot meals every time.",
+      link: "/meals",
+    },
+    {
+      id: "3",
+      image: "https://images.unsplash.com/photo-1495202411685-52f3b7bfc2ae?w=1200&h=400&fit=crop",
+      title: "Explore Your Favorite Restaurants",
+      description: "Find your next favorite meal from thousands of restaurants.",
+      link: "/providers",
+    },
+  ];
+
   return (
-    <section className="py-24">
-      <div className="max-w-7xl mx-auto px-5 text-center">
-        <h1 className="text-5xl font-bold">
-          Discover & Order
-          <span className="text-orange-500">
-            {" "}
-            Delicious Meals
-          </span>
-        </h1>
+    <section className="py-12">
+      <div className="max-w-7xl mx-auto px-5">
+        <div className="relative w-full h-96 bg-gradient-to-r from-orange-400 to-orange-600 rounded-2xl overflow-hidden">
+          {/* Fallback static hero if carousel is not needed */}
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center text-white px-5">
+              <h1 className="text-5xl font-bold mb-4">
+                Discover & Order
+                <span className="block text-orange-100">Delicious Meals</span>
+              </h1>
 
-        <p className="mt-6 text-lg text-gray-600">
-          Browse meals from trusted
-          providers and enjoy food at
-          your doorstep.
-        </p>
+              <p className="mt-6 text-lg text-orange-50 mb-8">
+                Browse meals from trusted providers and enjoy food at your doorstep.
+              </p>
 
-        <div className="flex justify-center gap-4 mt-8">
-          <Link
-            href="/meals"
-            className="px-6 py-3 bg-orange-500 text-white rounded-md"
-          >
-            Browse Meals
-          </Link>
+              <div className="flex justify-center gap-4 flex-wrap">
+                <Link
+                  href="/meals"
+                  className="px-8 py-3 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition"
+                >
+                  Browse Meals
+                </Link>
 
-          <Link
-            href="/register"
-            className="px-6 py-3 border rounded-md"
-          >
-            Become Provider
-          </Link>
+                <Link
+                  href="/register"
+                  className="px-8 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white/10 transition"
+                >
+                  Become Provider
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

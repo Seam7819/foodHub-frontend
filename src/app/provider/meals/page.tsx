@@ -24,7 +24,7 @@ export default function ProviderMealsPage() {
     description: "",
     price: "",
     image: "",
-    categoryName: "",
+    categoryId: "",
   });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -37,12 +37,16 @@ export default function ProviderMealsPage() {
   const { data: categoryData } = useCategories();
 
   const meals = data?.data || [];
-  const providerMeals = meals.filter((meal: any) => meal.providerId === user?.id);
+  const providerMeals = meals.filter(
+    (meal: any) =>
+      meal.provider?.userId === user?.id ||
+      meal.providerId === user?.id
+  );
 
   const createMutation = useMutation({
     mutationFn: createMeal,
     onSuccess: () => {
-      queryClient.invalidateQueries(["meals"]);
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
       toast.success("Meal added successfully");
       resetForm();
     },
@@ -55,7 +59,7 @@ export default function ProviderMealsPage() {
     mutationFn: ({ id, payload }: any) =>
       updateMeal(id, payload),
     onSuccess: () => {
-      queryClient.invalidateQueries(["meals"]);
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
       toast.success("Meal updated successfully");
       setEditingId(null);
       resetForm();
@@ -68,7 +72,7 @@ export default function ProviderMealsPage() {
   const deleteMutation = useMutation({
     mutationFn: deleteMeal,
     onSuccess: () => {
-      queryClient.invalidateQueries(["meals"]);
+      queryClient.invalidateQueries({ queryKey: ["meals"] });
       toast.success("Meal deleted successfully");
     },
     onError: () => {
@@ -79,7 +83,7 @@ export default function ProviderMealsPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!form.name.trim() || !form.price || !form.categoryName) {
+    if (!form.name.trim() || !form.price || !form.description.trim() || !form.categoryId) {
       toast.error("Please fill in all required fields");
       return;
     }
@@ -89,7 +93,7 @@ export default function ProviderMealsPage() {
       description: form.description,
       price: parseFloat(form.price),
       image: form.image,
-      categoryName: form.categoryName,
+      categoryId: form.categoryId,
     };
 
     if (editingId) {
@@ -100,12 +104,13 @@ export default function ProviderMealsPage() {
   };
 
   const handleEdit = (meal: any) => {
+    const category = categoryData?.data?.find((cat: any) => cat.name === meal.categoryName);
     setForm({
       name: meal.name,
       description: meal.description,
       price: meal.price.toString(),
       image: meal.image || "",
-      categoryName: meal.categoryName,
+      categoryId: category?.id || "",
     });
     setEditingId(meal.id);
     setShowForm(true);
@@ -117,7 +122,7 @@ export default function ProviderMealsPage() {
       description: "",
       price: "",
       image: "",
-      categoryName: "",
+      categoryId: "",
     });
     setEditingId(null);
     setShowForm(false);
@@ -203,16 +208,16 @@ export default function ProviderMealsPage() {
                 />
 
                 <select
-                  value={form.categoryName}
+                  value={form.categoryId}
                   onChange={(e) =>
-                    setForm({ ...form, categoryName: e.target.value })
+                    setForm({ ...form, categoryId: e.target.value })
                   }
                   className="w-full rounded border p-2"
                   required
                 >
                   <option value="">Select Category *</option>
                   {categoryData?.data?.map((category: any) => (
-                    <option key={category.id} value={category.name}>
+                    <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
                   ))}

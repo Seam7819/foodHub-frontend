@@ -8,7 +8,7 @@ import { getCartCount, listenCartUpdates } from "@/src/utils/cart";
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [cartCount, setCartCount] = useState(0);
-  const userId = user?.id ?? null;
+  const userId = user?.id || undefined;
 
   useEffect(() => {
     setCartCount(getCartCount(userId));

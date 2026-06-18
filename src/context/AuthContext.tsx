@@ -12,9 +12,9 @@ import { clearWishlist } from "@/src/services/wishlist.service";
 
 
 interface AuthContextType {
-  user: any;
+  user: { id?: string; [key: string]: any } | null;
   loading: boolean;
-  setUser: React.Dispatch<any>;
+  setUser: React.Dispatch<React.SetStateAction<{ id?: string; [key: string]: any } | null>>;
   logout: () => void;
 }
 
@@ -29,7 +29,7 @@ export const AuthProvider = ({
   children: React.ReactNode;
 }) => {
   const [user, setUser] =
-    useState(null);
+    useState<{ id?: string; [key: string]: any } | null>(null);
 
   const [loading, setLoading] =
     useState(true);

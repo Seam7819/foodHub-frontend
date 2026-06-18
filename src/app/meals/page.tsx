@@ -1,53 +1,85 @@
 "use client";
 
 import Link from "next/link";
-import { Suspense, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getMeals } from "@/src/services/meal.service";
 import { useCategories } from "@/src/hooks/useCategories";
 import Loader from "@/src/components/shared/Loader";
 import { IMeal } from "@/src/types/meal.types";
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 4;
 
 function MealsPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   const categoryFromUrl = searchParams.get("category") || "ALL";
+  const normalizedCategoryFromUrl =
+    categoryFromUrl === "ALL"
+      ? "ALL"
+      : categoryFromUrl.trim().toLowerCase();
+
+  const categoryParam = categoryFromUrl === "ALL" ? undefined : categoryFromUrl;
+
+  useEffect(() => {
+    setPage(1);
+  }, [categoryFromUrl, search]);
 
   const {
     data: mealsData,
     isLoading,
     isError,
   } = useQuery({
-    queryKey: ["meals"],
-    queryFn: () => getMeals(),
+    queryKey: ["meals", categoryParam],
+    queryFn: () => getMeals(categoryParam ? { category: categoryParam } : undefined),
     refetchOnWindowFocus: true,
   });
 
   const { data: categoryData } = useCategories();
   const meals: IMeal[] = mealsData?.data || [];
 
+  const categoryFilteredMeals = useMemo(() => {
+    if (categoryFromUrl === "ALL") {
+      return meals;
+    }
+
+    const matchedCategory = categoryData?.data?.find((cat: any) => {
+      return (
+        cat.id === categoryFromUrl ||
+        cat.name?.trim().toLowerCase() === normalizedCategoryFromUrl
+      );
+    });
+
+    if (!matchedCategory) {
+      return meals;
+    }
+
+    return meals.filter((meal) => {
+      return (
+        meal.categoryName?.trim().toLowerCase() === matchedCategory.name?.trim().toLowerCase() ||
+        // fallback if meal stores category id instead of name
+        (meal as any).categoryId === matchedCategory.id
+      );
+    });
+  }, [meals, categoryData?.data, categoryFromUrl, normalizedCategoryFromUrl]);
+
   const filteredMeals = useMemo(() => {
     const searchLower = search.toLowerCase();
 
-    return meals.filter((meal) => {
+    return categoryFilteredMeals.filter((meal) => {
       const matchesSearch =
         meal.name?.toLowerCase().includes(searchLower) ||
         meal.description?.toLowerCase().includes(searchLower) ||
         meal.provider?.businessName?.toLowerCase().includes(searchLower) ||
         meal.provider?.name?.toLowerCase().includes(searchLower);
 
-      const matchesCategory =
-        categoryFromUrl === "ALL" ||
-        meal.categoryName === categoryFromUrl;
-
-      return matchesSearch && matchesCategory;
+      return matchesSearch;
     });
-  }, [meals, search, categoryFromUrl]);
+  }, [categoryFilteredMeals, search]);
 
   const totalPages = Math.max(1, Math.ceil(filteredMeals.length / ITEMS_PER_PAGE));
 
@@ -87,12 +119,20 @@ function MealsPageContent() {
 
           <select
             value={categoryFromUrl}
-            onChange={() => setPage(1)}
+            onChange={(e) => {
+              const selected = e.target.value;
+              setPage(1);
+              if (selected === "ALL") {
+                router.push("/meals");
+              } else {
+                router.push(`/meals?category=${encodeURIComponent(selected)}`);
+              }
+            }}
             className="rounded border p-3 w-full sm:w-56"
           >
             <option value="ALL">All Categories</option>
             {categoryData?.data?.map((cat: any) => (
-              <option key={cat.id} value={cat.name}>
+              <option key={cat.id} value={cat.id}>
                 {cat.name}
               </option>
             ))}

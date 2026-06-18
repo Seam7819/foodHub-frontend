@@ -29,7 +29,7 @@ const Categories = () => {
             {categories.map((category: any) => (
               <Link
                 key={category.id}
-                href={`/meals?category=${category.name}`}
+                href={`/meals?category=${encodeURIComponent(category.id)}`}
               >
                 <div className="border p-6 rounded-lg text-center hover:shadow-lg hover:border-orange-500 transition cursor-pointer bg-white">
                   <span className="font-medium text-gray-800">

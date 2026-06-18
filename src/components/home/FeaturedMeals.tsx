@@ -7,7 +7,7 @@ import { getMeals } from "@/src/services/meal.service";
 
 const FeaturedMeals = () => {
   const [page, setPage] = useState(1);
-  const ITEMS_PER_PAGE = 8;
+  const ITEMS_PER_PAGE = 4;
 
   const { data, isLoading } = useQuery({
     queryKey: ["meals"],
@@ -41,28 +41,28 @@ const FeaturedMeals = () => {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
               {meals.map((meal: any) => (
                 <Link key={meal.id} href={`/meals/${meal.id}`}>
-                  <div className="border rounded-lg overflow-hidden hover:shadow-lg transition bg-white">
+                  <div className="border rounded-lg overflow-hidden hover:shadow-lg transition bg-white h-full flex flex-col">
                     {meal.image ? (
                       <img
                         src={meal.image}
                         alt={meal.name}
-                        className="w-full h-40 object-cover"
+                        className="w-full h-40 object-cover flex-shrink-0"
                       />
                     ) : (
-                      <div className="w-full h-40 bg-gray-200 rounded-t" />
+                      <div className="w-full h-40 bg-gray-200 rounded-t flex-shrink-0" />
                     )}
 
-                    <div className="p-4">
-                      <h3 className="font-semibold text-gray-800">
+                    <div className="p-4 flex flex-col flex-grow">
+                      <h3 className="font-semibold text-gray-800 line-clamp-2">
                         {meal.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-sm text-gray-600 mt-1 line-clamp-1">
                         {meal.provider?.businessName || meal.provider?.name || "Unknown restaurant"}
                       </p>
-                      <p className="text-gray-500 text-sm">
+                      <p className="text-gray-500 text-sm line-clamp-1">
                         {meal.categoryName}
                       </p>
-                      <p className="text-orange-500 font-bold mt-2">
+                      <p className="text-orange-500 font-bold mt-auto pt-2">
                         ৳{meal.price}
                       </p>
                     </div>

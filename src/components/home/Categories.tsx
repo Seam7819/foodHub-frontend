@@ -12,7 +12,7 @@ const Categories = () => {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-5">
-        <h2 className="text-3xl font-bold mb-8">
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8">
           Categories
         </h2>
 
@@ -25,7 +25,7 @@ const Categories = () => {
             <p className="text-gray-500">No categories available</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">
             {categories.map((category: any) => (
               <Link
                 key={category.id}

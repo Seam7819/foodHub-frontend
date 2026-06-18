@@ -24,7 +24,7 @@ const FeaturedMeals = () => {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-5">
-        <h2 className="text-3xl font-bold mb-8">
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8">
           Featured Meals
         </h2>
 
@@ -38,7 +38,7 @@ const FeaturedMeals = () => {
           </div>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
               {meals.map((meal: any) => (
                 <Link key={meal.id} href={`/meals/${meal.id}`}>
                   <div className="border rounded-lg overflow-hidden hover:shadow-lg transition bg-white h-full flex flex-col">
@@ -46,13 +46,13 @@ const FeaturedMeals = () => {
                       <img
                         src={meal.image}
                         alt={meal.name}
-                        className="w-full h-40 object-cover flex-shrink-0"
+                        className="w-full h-40 object-cover shrink-0"
                       />
                     ) : (
-                      <div className="w-full h-40 bg-gray-200 rounded-t flex-shrink-0" />
+                      <div className="w-full h-40 bg-gray-200 rounded-t shrink-0" />
                     )}
 
-                    <div className="p-4 flex flex-col flex-grow">
+                    <div className="p-4 flex flex-col grow">
                       <h3 className="font-semibold text-gray-800 line-clamp-2">
                         {meal.name}
                       </h3>

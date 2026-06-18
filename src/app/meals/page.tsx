@@ -68,7 +68,11 @@ function MealsPageContent() {
   }, [meals, categoryData?.data, categoryFromUrl, normalizedCategoryFromUrl]);
 
   const filteredMeals = useMemo(() => {
-    const searchLower = search.toLowerCase();
+    const searchLower = search.toLowerCase().trim();
+
+    if (!searchLower) {
+      return categoryFilteredMeals;
+    }
 
     return categoryFilteredMeals.filter((meal) => {
       const matchesSearch =
@@ -102,7 +106,7 @@ function MealsPageContent() {
     <div className="max-w-7xl mx-auto py-10 px-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold">Browse Meals</h1>
+          <h1 className="text-2xl md:text-3xl font-bold">Browse Meals</h1>
           <p className="text-gray-600">Search and filter meals with pagination.</p>
         </div>
 
@@ -140,7 +144,7 @@ function MealsPageContent() {
         </div>
       </div>
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {paginatedMeals.map((meal) => (
           <div key={meal.id} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
             <div className="h-48 w-full overflow-hidden rounded-lg bg-gray-100">

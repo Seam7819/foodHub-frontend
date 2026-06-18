@@ -202,14 +202,14 @@ export default function MealDetailsPage({
             )}
 
             <div className="mt-6">
-              <h1 className="text-4xl font-bold">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
                 {meal.name}
               </h1>
               <p className="mt-4 text-gray-600">
                 {meal.description}
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <span className="text-3xl font-bold text-orange-500">
+                <span className="text-2xl sm:text-3xl font-bold text-orange-500">
                   ৳ {meal.price}
                 </span>
                 <div className="flex gap-3">

@@ -33,26 +33,26 @@ const Hero = () => {
           {/* Fallback static hero if carousel is not needed */}
           <div className="flex items-center justify-center h-full">
             <div className="text-center text-white px-5">
-              <h1 className="text-5xl font-bold mb-4">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
                 Discover & Order
                 <span className="block text-orange-100">Delicious Meals</span>
               </h1>
 
-              <p className="mt-6 text-lg text-orange-50 mb-8">
+              <p className="mt-6 text-sm sm:text-base md:text-lg text-orange-50 mb-8">
                 Browse meals from trusted providers and enjoy food at your doorstep.
               </p>
 
-              <div className="flex justify-center gap-4 flex-wrap">
+              <div className="flex justify-center gap-2 sm:gap-4 flex-wrap flex-col sm:flex-row">
                 <Link
                   href="/meals"
-                  className="px-8 py-3 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition"
+                  className="px-4 sm:px-8 py-2 sm:py-3 bg-white text-orange-600 rounded-lg font-semibold hover:bg-orange-50 transition text-sm sm:text-base"
                 >
                   Browse Meals
                 </Link>
 
                 <Link
                   href="/register"
-                  className="px-8 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white/10 transition"
+                  className="px-4 sm:px-8 py-2 sm:py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white/10 transition text-sm sm:text-base"
                 >
                   Become Provider
                 </Link>

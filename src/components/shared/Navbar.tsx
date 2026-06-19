@@ -24,9 +24,9 @@ const Navbar = () => {
           href="/"
           className="text-xl md:text-2xl font-bold text-white hover:text-orange-100 transition"
         >
-          FoodHub
+          FoodHub 
         </Link>
-
+        
         <div className="hidden md:flex gap-6 items-center text-sm md:text-base text-white">
           <Link href="/" className="hover:text-orange-100 transition">Home</Link>
           <Link href="/meals" className="hover:text-orange-100 transition">Meals</Link>

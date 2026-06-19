@@ -35,7 +35,7 @@ export default function RootLayout({
 }
 
 export const metadata = {
-  title: "FoodHub",
+  title: "Food Hub",
   icons: {
     icon: "./favicon.png",
   },

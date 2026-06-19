@@ -12,7 +12,7 @@ const Providers = () => {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-5">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8">
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-gray-800">
           Top Providers
         </h2>
 

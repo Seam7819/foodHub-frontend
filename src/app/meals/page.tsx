@@ -106,7 +106,7 @@ function MealsPageContent() {
     <div className="max-w-7xl mx-auto py-10 px-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
         <div className="space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold">Browse Meals</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Browse Meals</h1>
           <p className="text-gray-600">Search and filter meals with pagination.</p>
         </div>
 

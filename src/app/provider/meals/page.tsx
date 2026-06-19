@@ -134,7 +134,7 @@ export default function ProviderMealsPage() {
         <div className="max-w-7xl mx-auto py-10 px-5">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-4xl font-bold">My Meals</h1>
+              <h1 className="text-4xl font-bold text-black\">My Meals</h1>
               <p className="text-gray-600">
                 Manage your restaurant's meal menu.
               </p>
@@ -147,7 +147,7 @@ export default function ProviderMealsPage() {
           {/* Add/Edit Form */}
           <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-semibold">
+              <h2 className="text-2xl font-semibold text-black">
                 {editingId ? "Edit Meal" : "Add New Meal"}
               </h2>
               {showForm && (

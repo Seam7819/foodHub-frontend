@@ -68,8 +68,8 @@ export default function OrdersPage() {
                   <p className="text-gray-500">Loading orders...</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
+                <div className="overflow-x-auto ">
+                  <table className="w-full text-sm ">
                     <thead>
                       <tr className="border-b bg-gray-50">
                         <th className="text-left p-3 font-semibold">Customer</th>
@@ -94,7 +94,7 @@ export default function OrdersPage() {
                               {order.user?.name || "Unknown"}
                             </td>
                             <td className="p-3">{order.user?.email || "N/A"}</td>
-                            <td className="p-3 text-gray-600">
+                            <td className="p-3">
                               {order.deliveryAddress || "N/A"}
                             </td>
                             <td className="p-3 font-semibold">৳ {order.totalPrice}</td>
@@ -109,7 +109,7 @@ export default function OrdersPage() {
                                 {order.status}
                               </span>
                             </td>
-                            <td className="p-3 text-gray-600">
+                            <td className="p-3 ">
                               {order.createdAt
                                 ? new Date(order.createdAt).toLocaleDateString()
                                 : "N/A"}

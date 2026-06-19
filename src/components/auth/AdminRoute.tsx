@@ -18,5 +18,5 @@ export default function AdminRoute({
     }
   }, [router]);
 
-  return <>{children}</>;
+  return <div className="text-orange-400">{children}</div>;
 }

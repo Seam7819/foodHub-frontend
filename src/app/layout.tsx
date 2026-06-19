@@ -33,3 +33,10 @@ export default function RootLayout({
     </html>
   );
 }
+
+export const metadata = {
+  title: "FoodHub",
+  icons: {
+    icon: "./favicon.png",
+  },
+};

@@ -76,7 +76,7 @@ const FeaturedMeals = () => {
                 type="button"
                 disabled={page === 1}
                 onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-                className="rounded border bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded border text-black bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Previous
               </button>
@@ -89,7 +89,7 @@ const FeaturedMeals = () => {
                 type="button"
                 disabled={page === totalPages}
                 onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-                className="rounded border bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded border text-black bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Next
               </button>

@@ -62,7 +62,7 @@ export default function ProfilePage() {
       <RoleGuard role="CUSTOMER">
         <div className="max-w-7xl mx-auto py-10 px-5 space-y-8">
           <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h1 className="text-4xl font-bold mb-2">My Profile</h1>
+            <h1 className="text-4xl font-bold mb-2 text-black">My Profile</h1>
             <p className="text-gray-600">
               Manage your account details and track your orders.
             </p>
@@ -70,28 +70,28 @@ export default function ProfilePage() {
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <div className="rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 p-4">
                 <p className="text-sm text-gray-600">Name</p>
-                <p className="mt-1 text-lg font-semibold">{user?.name || "-"}</p>
+                <p className="mt-1 text-lg font-semibold text-black">{user?.name || "-"}</p>
               </div>
               <div className="rounded-lg bg-gradient-to-br from-green-50 to-green-100 p-4">
                 <p className="text-sm text-gray-600">Email</p>
-                <p className="mt-1 text-lg font-semibold break-all text-sm">
+                <p className="mt-1 text-lg font-semibold break-all text-sm text-black">
                   {user?.email || "-"}
                 </p>
               </div>
               <div className="rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 p-4">
                 <p className="text-sm text-gray-600">Role</p>
-                <p className="mt-1 text-lg font-semibold">{user?.role || "-"}</p>
+                <p className="mt-1 text-lg font-semibold text-black">{user?.role || "-"}</p>
               </div>
               <div className="rounded-lg bg-gradient-to-br from-orange-50 to-orange-100 p-4">
                 <p className="text-sm text-gray-600">Total Orders</p>
-                <p className="mt-1 text-lg font-semibold">{orders.length}</p>
+                <p className="mt-1 text-lg font-semibold text-black">{orders.length}</p>
               </div>
             </div>
           </div>
 
           <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold">Order Tracking</h2>
+              <h2 className="text-2xl font-semibold text-black">Order Tracking</h2>
               {loading && <span className="text-sm text-gray-500">Loading...</span>}
             </div>
 
@@ -110,7 +110,7 @@ export default function ProfilePage() {
                 </Link>
               </div>
             ) : (
-              <div className="mt-6 space-y-4">
+              <div className="mt-6 space-y-4 text-black">
                 {orders.map((order) => (
                   <div
                     key={order.id}

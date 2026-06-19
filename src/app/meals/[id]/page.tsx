@@ -202,7 +202,7 @@ export default function MealDetailsPage({
             )}
 
             <div className="mt-6">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+              <h1 className="text-2xl text-black sm:text-3xl md:text-4xl font-bold">
                 {meal.name}
               </h1>
               <p className="mt-4 text-gray-600">
@@ -231,12 +231,12 @@ export default function MealDetailsPage({
           </div>
 
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-semibold mb-4">
+            <h2 className="text-2xl font-semibold mb-4 text-black">
               Reviews
             </h2>
-            <div className="space-y-4">
+            <div className="space-y-4 text-black">
               <div className="rounded-lg bg-gray-50 p-4">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-black">
                   Average rating: {averageRating} / 5 ({reviews.length} review{reviews.length === 1 ? "" : "s"})
                 </p>
               </div>
@@ -307,7 +307,7 @@ export default function MealDetailsPage({
         </div>
 
         <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-          <h2 className="text-2xl font-semibold mb-4">
+          <h2 className="text-2xl font-semibold mb-4 text-black">
             Meal Details
           </h2>
           <div className="space-y-3 text-gray-700">

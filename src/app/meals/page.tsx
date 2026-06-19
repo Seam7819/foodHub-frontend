@@ -106,7 +106,7 @@ function MealsPageContent() {
     <div className="max-w-7xl mx-auto py-10 px-5">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
         <div className="space-y-2">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Browse Meals</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-orange-400">Browse Meals</h1>
           <p className="text-gray-600">Search and filter meals with pagination.</p>
         </div>
 
@@ -136,7 +136,7 @@ function MealsPageContent() {
           >
             <option value="ALL">All Categories</option>
             {categoryData?.data?.map((cat: any) => (
-              <option key={cat.id} value={cat.id}>
+              <option key={cat.id} value={cat.id} className="text-black">
                 {cat.name}
               </option>
             ))}
@@ -146,7 +146,7 @@ function MealsPageContent() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {paginatedMeals.map((meal) => (
-          <div key={meal.id} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+          <div key={meal.id} className="rounded-xl text-black  border-gray-200 bg-white p-5 shadow-sm">
             <div className="h-48 w-full overflow-hidden rounded-lg bg-gray-100">
               {meal.image ? (
                 <img src={meal.image} alt={meal.name} className="h-full w-full object-cover" />
@@ -177,7 +177,7 @@ function MealsPageContent() {
           type="button"
           disabled={page === 1}
           onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          className="rounded border bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded border text-black bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Previous
         </button>
@@ -188,7 +188,7 @@ function MealsPageContent() {
           type="button"
           disabled={page === totalPages}
           onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
-          className="rounded border bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded border text-black bg-white px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
         >
           Next
         </button>

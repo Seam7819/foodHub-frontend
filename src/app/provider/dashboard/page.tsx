@@ -44,7 +44,7 @@ export default function ProviderDashboardPage() {
                 {isLoading ? (
                   <Loader />
                 ) : isError ? (
-                  <p className="text-orange-400">Failed to load orders.</p>
+                  <p className="text-black">Failed to load orders.</p>
                 ) : (
                   <>
                     <p className="text-gray-600 mb-4">

@@ -161,9 +161,9 @@ export default function ProviderMealsPage() {
             </div>
 
             {showForm ? (
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4 text-black">
                 <div className="grid gap-4 md:grid-cols-2">
-                  <input
+                  <input 
                     type="text"
                     placeholder="Meal Name *"
                     value={form.name}
@@ -256,7 +256,7 @@ export default function ProviderMealsPage() {
 
           {/* Meals List */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
-            <h2 className="text-2xl font-semibold mb-4">
+            <h2 className="text-2xl font-semibold mb-4 text-black">
               Meals ({providerMeals.length})
             </h2>
 
@@ -271,23 +271,23 @@ export default function ProviderMealsPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
-                      <th className="text-left p-3">Name</th>
-                      <th className="text-left p-3">Description</th>
-                      <th className="text-left p-3">Price</th>
-                      <th className="text-left p-3">Category</th>
-                      <th className="text-center p-3">Actions</th>
+                      <th className="text-left p-3 text-black">Name</th>
+                      <th className="text-left p-3 text-black">Description</th>
+                      <th className="text-left p-3 text-black">Price</th>
+                      <th className="text-left p-3 text-black">Category</th>
+                      <th className="text-center p-3 text-black">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {providerMeals.map((meal: any) => (
                       <tr key={meal.id} className="border-b hover:bg-gray-50">
-                        <td className="p-3 font-medium">{meal.name}</td>
-                        <td className="p-3 text-gray-600">
+                        <td className="p-3 font-medium text-black">{meal.name}</td>
+                        <td className="p-3 text-black">
                           {meal.description?.substring(0, 50)}...
                         </td>
-                        <td className="p-3">৳ {meal.price}</td>
-                        <td className="p-3">{meal.categoryName}</td>
-                        <td className="p-3">
+                        <td className="p-3 text-black">৳ {meal.price}</td>
+                        <td className="p-3 text-black">{meal.categoryName}</td>
+                        <td className="p-3 text-black">
                           <div className="flex gap-2 justify-center">
                             <button
                               onClick={() => handleEdit(meal)}

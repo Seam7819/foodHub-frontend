@@ -33,7 +33,7 @@ export default function ProviderDashboardPage() {
           <div className="space-y-6">
             <div>
               <h1 className="text-4xl font-bold text-black">Provider Dashboard</h1>
-              <p className="mt-2 text-gray-600">
+              <p className="mt-2 text-orange-400">
                 Manage your meals and orders from here.
               </p>
             </div>
@@ -44,7 +44,7 @@ export default function ProviderDashboardPage() {
                 {isLoading ? (
                   <Loader />
                 ) : isError ? (
-                  <p className="text-gray-500">Failed to load orders.</p>
+                  <p className="text-orange-400">Failed to load orders.</p>
                 ) : (
                   <>
                     <p className="text-gray-600 mb-4">

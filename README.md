@@ -89,6 +89,18 @@ Create `.env.local`
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
+### Vercel production deployment
+
+Set a Vercel environment variable for the frontend project:
+
+```env
+NEXT_PUBLIC_API_URL=https://food-hub-backend-eosin.vercel.app/api
+```
+
+Then redeploy the frontend.
+
+For the backend project, make sure the deployed backend has any required database and secret env vars configured in Vercel as well.
+
 ---
 
 ## Run Development Server

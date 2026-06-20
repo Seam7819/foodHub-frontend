@@ -1,36 +1,198 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FoodHub Frontend
 
-## Getting Started
+FoodHub Frontend is a responsive food ordering web application built with Next.js.
 
-First, run the development server:
+Users can browse meals, place orders, manage carts, and providers can manage meals and orders.
+
+---
+
+## Tech Stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- Axios
+- Context API
+- Sonner Toast
+
+---
+
+## Features
+
+### Authentication
+
+- Login
+- Registration
+- Logout
+- JWT Storage
+- Protected Routes
+
+### Customer Features
+
+- Browse Meals
+- Search Meals
+- Filter Meals
+- View Meal Details
+- Add To Cart
+- Manage Cart
+- Checkout
+- View Orders
+- Leave Reviews
+
+### Provider Features
+
+- Create Meals
+- Update Meals
+- Delete Meals
+- Manage Orders
+
+### Admin Features
+
+- Manage Categories
+- Manage Users
+- Monitor Orders
+
+---
+
+## Responsive Design
+
+Supports:
+
+- Mobile
+- Tablet
+- Desktop
+
+---
+
+## Installation
+
+### Clone Repository
+
+```bash
+git clone <repository-url>
+```
+
+### Install Dependencies
+
+```bash
+npm install
+```
+
+---
+
+## Environment Variables
+
+Create `.env.local`
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
+
+---
+
+## Run Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Application URL
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```txt
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```txt
+src
+├── app
+│   ├── login
+│   ├── register
+│   ├── meals
+│   ├── cart
+│   ├── orders
+│   └── profile
+│
+├── components
+│   ├── layout
+│   ├── meals
+│   ├── cart
+│   └── shared
+│
+├── services
+│   ├── auth.service.ts
+│   ├── meal.service.ts
+│   ├── cart.service.ts
+│   └── order.service.ts
+│
+├── context
+│   └── AuthContext.tsx
+│
+├── hooks
+├── lib
+└── types
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Authentication Flow
 
-## Deploy on Vercel
+### Login
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```txt
+User Login
+      ↓
+Access Token
+      ↓
+Store in LocalStorage
+      ↓
+Protected Routes
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Protected Route
+
+```txt
+Customer
+Provider
+Admin
+```
+
+Access control is handled using JWT and role-based authorization.
+
+---
+
+## Available Scripts
+
+Development
+
+```bash
+npm run dev
+```
+
+Build
+
+```bash
+npm run build
+```
+
+Start Production
+
+```bash
+npm start
+```
+
+Lint
+
+```bash
+npm run lint
+```
+
+---
+
+## Author
+
+FoodHub Frontend

@@ -70,9 +70,15 @@ const LoginPage = () => {
           )
         );
 
+        const htmlResponse =
+          typeof error?.response?.data === "string" &&
+          error.response.data.trim().startsWith("<!DOCTYPE html>");
+
         toast.error(
-          error?.response?.data?.message ||
-          "Login failed"
+          htmlResponse
+            ? "Login API route not found. Verify NEXT_PUBLIC_API_URL and that your backend is running."
+            : error?.response?.data?.message ||
+              "Login failed"
         );
       }
     };

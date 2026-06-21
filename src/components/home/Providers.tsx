@@ -12,8 +12,8 @@ const Providers = () => {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-5">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-orange-400">
-          Top Providers
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-cyan-600">
+          Trusted Partners
         </h2>
 
         {isLoading ? (
@@ -42,8 +42,8 @@ const Providers = () => {
                   <p className="text-gray-500 mt-2 text-sm">
                     {provider.description || "Premium food provider"}
                   </p>
-                  <div className="mt-3 text-orange-500 font-semibold">
-                    View Restaurant →
+                  <div className="mt-3 text-cyan-600 font-semibold">
+                    View Partner →
                   </div>
                 </div>
               </Link>

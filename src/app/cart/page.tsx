@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth } from "@/src/context/AuthContext";
-import { createOrder } from "@/src/services/order.service";
 import { addToCart as addCartItemServer, clearServerCart } from "@/src/services/cart.service";
+import { createCheckoutSession } from "@/src/services/stripe.service";
 import {
   CartItem,
   clearCart as clearCartStorage,
@@ -21,7 +21,6 @@ export default function CartPage() {
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -115,15 +114,16 @@ export default function CartPage() {
         });
       }
 
-      const payload = {
+      const session = await createCheckoutSession({
         deliveryAddress: address,
-      };
+        items: cart,
+      });
 
-      await createOrder(payload);
-      
-      toast.success("Order placed successfully.");
-      clearCart();
-      setOrderPlaced(true);
+      if (!session?.url) {
+        throw new Error("Unable to start Stripe checkout. Please try again.");
+      }
+
+      window.location.href = session.url;
     } catch (error: any) {
       console.error("Full Error Object:", error);
       console.error("Error Status:", error.response?.status);
@@ -278,44 +278,6 @@ export default function CartPage() {
         </div>
       )}
 
-      {orderPlaced && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 py-6">
-          <div className="w-full max-w-xl rounded-3xl bg-white p-8 shadow-2xl ring-1 ring-black/5">
-            <div className="mb-6 text-center">
-              <p className="text-sm uppercase tracking-[0.2em] text-orange-500">Order Confirmed</p>
-              <h2 className="mt-4 text-3xl font-bold text-slate-900">
-                Thank you{user?.name ? `, ${user.name}` : ""}!
-              </h2>
-              <p className="mt-3 text-gray-600">
-                Your order has been placed successfully. We are preparing it now.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={() => {
-                  setOrderPlaced(false);
-                  router.push("/profile");
-                }}
-                className="rounded bg-orange-500 px-4 py-3 text-white"
-              >
-                View My Orders
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setOrderPlaced(false);
-                  router.push("/meals");
-                }}
-                className="rounded border border-gray-200 px-4 py-3 text-gray-700"
-              >
-                Continue Shopping
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

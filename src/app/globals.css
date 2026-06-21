@@ -1,8 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #eff6ff;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-muted: #e2e8f0;
+  --primary: #0f766e;
+  --primary-strong: #0a6c9f;
+  --primary-soft: #bae6fd;
+  --accent: #0ea5e9;
+  --text-muted: #475569;
+  --border: #cbd5e1;
+}
+
+[data-theme="dark"] {
+  --background: #020617;
+  --foreground: #e2e8f0;
+  --surface: #0f172a;
+  --surface-muted: #1e293b;
+  --primary: #38bdf8;
+  --primary-strong: #0ea5e9;
+  --primary-soft: #1e293b;
+  --accent: #7dd3fc;
+  --text-muted: #94a3b8;
+  --border: #334155;
 }
 
 @theme inline {
@@ -12,15 +33,63 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--background);
+  color: var(--foreground);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+.bg-app-bg {
+  background-color: var(--background);
+}
+
+.text-app-fg {
+  color: var(--foreground);
+}
+
+.border-app {
+  border-color: var(--border);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-surface-muted {
+  background-color: var(--surface-muted);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.btn-primary {
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--primary);
+  transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-strong);
 }

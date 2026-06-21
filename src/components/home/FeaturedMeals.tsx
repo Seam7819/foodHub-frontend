@@ -24,8 +24,8 @@ const FeaturedMeals = () => {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-5">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-orange-400">
-          Featured Meals
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-cyan-600">
+          Featured Services
         </h2>
 
         {isLoading ? (
@@ -34,7 +34,7 @@ const FeaturedMeals = () => {
           </div>
         ) : meals.length === 0 ? (
           <div className="flex justify-center items-center h-40">
-            <p className="text-gray-500">No meals available</p>
+            <p className="text-gray-500">No services available</p>
           </div>
         ) : (
           <>
@@ -57,7 +57,7 @@ const FeaturedMeals = () => {
                         {meal.name}
                       </h3>
                       <p className="text-sm text-gray-600 mt-1 line-clamp-1">
-                        {meal.provider?.businessName || meal.provider?.name || "Unknown restaurant"}
+                        {meal.provider?.businessName || meal.provider?.name || "Unknown partner"}
                       </p>
                       <p className="text-gray-500 text-sm line-clamp-1">
                         {meal.categoryName}

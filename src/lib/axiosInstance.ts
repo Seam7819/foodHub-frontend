@@ -10,24 +10,24 @@ const resolveBaseUrl = () => {
 
   if (envUrl) {
     if (process.env.NODE_ENV === "production" && isLocalhostUrl(envUrl)) {
-      // Avoid using localhost in production builds.
-      // Vercel should use the deployed backend URL instead.
       if (typeof window !== "undefined") {
         // eslint-disable-next-line no-console
         console.error(
-          "NEXT_PUBLIC_API_URL is set to localhost in production. Update your Vercel environment variable to your deployed backend URL."
+          "NEXT_PUBLIC_API_URL is set to localhost in production. Update your deployed backend URL in your environment variables."
         );
       }
       return undefined;
     }
-    return envUrl;
+
+    // Ensure baseURL always ends with a single trailing slash so axios joins paths correctly.
+    return envUrl.replace(/\/$/, "") + "/";
   }
 
   if (typeof window !== "undefined") {
-    return `${window.location.origin}/api`;
+    return `${window.location.origin}/api/`;
   }
 
-  return undefined;
+  return "/api/";
 };
 
 const axiosInstance = axios.create({
@@ -38,10 +38,14 @@ const axiosInstance = axios.create({
   },
 });
 
-// Request interceptor to add auth token
+// Request interceptor to normalize URLs and add auth token
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
+
+    // Keep the request path as provided (with or without leading slash).
+    // baseURL includes a trailing slash, so axios will correctly join paths.
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

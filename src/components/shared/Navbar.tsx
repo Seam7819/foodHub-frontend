@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { getCartCount, listenCartUpdates } from "@/src/utils/cart";
+import ThemeToggle from "@/src/components/shared/ThemeToggle";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -22,19 +23,21 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-5 h-16 flex items-center justify-between">
         <Link
           href="/"
-          className="text-xl md:text-2xl font-bold text-white hover:text-orange-100 transition"
+          className="text-xl md:text-2xl font-bold text-white hover:text-slate-100 transition"
         >
-          FoodHub 
+          OrgNest
         </Link>
-        
+
         <div className="hidden md:flex gap-6 items-center text-sm md:text-base text-white">
-          <Link href="/" className="hover:text-orange-100 transition">Home</Link>
-          <Link href="/meals" className="hover:text-orange-100 transition">Meals</Link>
-          <Link href="/wishlist" className="hover:text-orange-100 transition">Wishlist</Link>
-          <Link href="/cart" className="relative hover:text-orange-100 transition">
-            Cart
+          <Link href="/" className="hover:text-slate-100 transition">Home</Link>
+          <Link href="/meals" className="hover:text-slate-100 transition">Services</Link>
+          <Link href="/blog" className="hover:text-slate-100 transition">Insights</Link>
+          <Link href="/assistant" className="hover:text-slate-100 transition">Assistant</Link>
+          <Link href="/wishlist" className="hover:text-slate-100 transition">Favorites</Link>
+          <Link href="/cart" className="relative hover:text-slate-100 transition">
+            Workspace
             {cartCount > 0 && (
-              <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white text-orange-600 px-2 text-xs font-semibold">
+              <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white text-slate-900 px-2 text-xs font-semibold">
                 {cartCount}
               </span>
             )}
@@ -42,6 +45,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex gap-2 md:gap-3 items-center flex-wrap justify-end">
+          <ThemeToggle />
           <Link href="/cart" className="md:hidden relative p-2 text-white hover:text-orange-100 transition">
             Cart
             {cartCount > 0 && (

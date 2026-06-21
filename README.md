@@ -1,6 +1,6 @@
-# FoodHub Frontend
+# OrgNest Frontend
 
-FoodHub Frontend is a responsive food ordering web application built with Next.js.
+OrgNest Frontend is a responsive organization management web application built with Next.js.
 
 Users can browse meals, place orders, manage carts, and providers can manage meals and orders.
 

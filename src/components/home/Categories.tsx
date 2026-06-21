@@ -12,8 +12,8 @@ const Categories = () => {
   return (
     <section className="py-16">
       <div className="max-w-7xl mx-auto px-5">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-orange-400">
-          Categories
+        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-8 text-cyan-600">
+          Service Categories
         </h2>
 
         {isLoading ? (
@@ -22,7 +22,7 @@ const Categories = () => {
           </div>
         ) : categories.length === 0 ? (
           <div className="flex justify-center items-center h-20">
-            <p className="text-gray-500">No categories available</p>
+            <p className="text-gray-500">No service categories available</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5">

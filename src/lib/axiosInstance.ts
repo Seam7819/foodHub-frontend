@@ -58,14 +58,35 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // Log detailed error to console to help diagnose deployment/runtime issues
     try {
+      const apiError: Record<string, unknown> = {
+        message: error?.message ?? "Unknown API error",
+        url: error?.config?.url ?? error?.request?.responseURL,
+        method: error?.config?.method,
+        status: error?.response?.status,
+        data: error?.response?.data,
+        isAxiosError: axios.isAxiosError(error),
+        code: error?.code,
+      };
+
+      if (axios.isAxiosError(error)) {
+        apiError.requestUrl = error.config?.url;
+        apiError.requestMethod = error.config?.method;
+        apiError.responseHeaders = error.response?.headers;
+        apiError.rawError = {
+          message: error.message,
+          name: error.name,
+          code: error.code,
+          response: {
+            status: error.response?.status,
+            data: error.response?.data,
+          },
+        };
+      } else if (typeof error === "object" && error !== null) {
+        apiError.rawError = error;
+      }
+
       // eslint-disable-next-line no-console
-      console.error("API error:", {
-        message: error.message,
-        url: error.config?.url,
-        method: error.config?.method,
-        status: error.response?.status,
-        data: error.response?.data,
-      });
+      console.error("API error:", apiError, error);
     } catch (e) {
       // ignore logging failures
     }

@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         email: normalizedEmail,
         password: String(password || "dev"),
         role: guessedRole,
-        businessName: guessedRole === "PROVIDER" ? "OrgNest Services" : undefined,
+        businessName: guessedRole === "PROVIDER" ? "FoodHub Services" : undefined,
         address: guessedRole === "PROVIDER" ? "123 Provider Way" : undefined,
       };
 

@@ -90,7 +90,7 @@ export default function EditBlogPage({ params }: { params: Promise<{ id: string 
           <button
             type="submit"
             disabled={loading}
-            className="rounded-full bg-(--primary) px-6 py-3 text-white shadow-[0_20px_40px_rgba(15,118,110,0.15)] hover:bg-(--primary-strong) transition disabled:opacity-60"
+            className="rounded-full bg-[var(--primary)] px-6 py-3 text-white shadow-[0_20px_40px_rgba(15,118,110,0.15)] hover:bg-[var(--primary-strong)] transition disabled:opacity-60"
           >
             {loading ? "Saving..." : "Save Changes"}
           </button>

@@ -27,7 +27,7 @@ export async function POST(request: Request) {
         messages: [
           {
             role: "system",
-            content: "You are OrgNest's AI assistant. Answer questions about service workflows, teams, project onboarding, and the OrgNest platform clearly and concisely.",
+            content: "You are FoodHub's AI assistant. Answer questions about service workflows, teams, project onboarding, and the FoodHub platform clearly and concisely.",
           },
           {
             role: "user",

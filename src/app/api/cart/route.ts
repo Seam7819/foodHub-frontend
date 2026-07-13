@@ -34,3 +34,14 @@ export async function GET(request: Request) {
 
   return NextResponse.json({ data: carts[userId] || [] });
 }
+
+export async function DELETE(request: Request) {
+  const authHeader = request.headers.get("authorization") ?? undefined;
+  const userId = getUserIdFromAuth(authHeader) || "guest";
+
+  if (carts[userId]) {
+    carts[userId] = [];
+  }
+
+  return NextResponse.json({ data: [], message: "Cart cleared" });
+}

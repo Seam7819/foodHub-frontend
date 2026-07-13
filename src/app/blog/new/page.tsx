@@ -15,14 +15,41 @@ export default function CreateBlogPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
+    // Client-side validation to avoid server-side 400 responses
+    if (title.trim().length < 5) {
+      toast.error("Title must be at least 5 characters.");
+      setLoading(false);
+      return;
+    }
 
+    if (content.trim().length < 20) {
+      toast.error("Content must be at least 20 characters.");
+      setLoading(false);
+      return;
+    }
     try {
       await createBlog({ title, excerpt, content });
       toast.success("Blog post created.");
       router.push("/blog");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
-      toast.error("Unable to create blog post.");
+
+      const htmlResponse =
+        typeof error?.response?.data === "string" &&
+        error.response.data.trim().startsWith("<!DOCTYPE html>");
+
+      const apiMessage =
+        error?.response?.data?.message ||
+        (error?.response?.data?.errorDetails &&
+          error.response.data.errorDetails.map((d: any) => d.message).join(" \n")) ||
+        error?.message ||
+        "Unable to create blog post.";
+
+      toast.error(
+        htmlResponse
+          ? "Blog API route not found. Verify NEXT_PUBLIC_API_URL and that your backend is running."
+          : apiMessage
+      );
     } finally {
       setLoading(false);
     }

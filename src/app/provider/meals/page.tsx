@@ -47,11 +47,11 @@ export default function ProviderMealsPage() {
     mutationFn: createMeal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"] });
-      toast.success("Meal added successfully");
+      toast.success("Product added successfully");
       resetForm();
     },
     onError: () => {
-      toast.error("Failed to add meal");
+      toast.error("Failed to add product");
     },
   });
 
@@ -60,12 +60,12 @@ export default function ProviderMealsPage() {
       updateMeal(id, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"] });
-      toast.success("Meal updated successfully");
+      toast.success("Product updated successfully");
       setEditingId(null);
       resetForm();
     },
     onError: () => {
-      toast.error("Failed to update meal");
+      toast.error("Failed to update product");
     },
   });
 
@@ -73,10 +73,10 @@ export default function ProviderMealsPage() {
     mutationFn: deleteMeal,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["meals"] });
-      toast.success("Meal deleted successfully");
+      toast.success("Product deleted successfully");
     },
     onError: () => {
-      toast.error("Failed to delete meal");
+      toast.error("Failed to delete product");
     },
   });
 
@@ -134,9 +134,9 @@ export default function ProviderMealsPage() {
         <div className="max-w-7xl mx-auto py-10 px-5">
           <div className="flex justify-between items-center mb-6">
             <div>
-              <h1 className="text-4xl font-bold text-black\">My Meals</h1>
+              <h1 className="text-4xl font-bold text-black">My Products</h1>
               <p className="text-gray-600">
-                Manage your restaurant's meal menu.
+                Manage your restaurant's product catalog.
               </p>
             </div>
             <Link href="/provider/dashboard" className="text-orange-500 hover:underline">
@@ -148,7 +148,7 @@ export default function ProviderMealsPage() {
           <div className="mb-8 rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-2xl font-semibold text-black">
-                {editingId ? "Edit Meal" : "Add New Meal"}
+                {editingId ? "Edit Product" : "Add New Product"}
               </h2>
               {showForm && (
                 <button
@@ -165,7 +165,7 @@ export default function ProviderMealsPage() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <input 
                     type="text"
-                    placeholder="Meal Name *"
+                    placeholder="Product Name *"
                     value={form.name}
                     onChange={(e) =>
                       setForm({ ...form, name: e.target.value })
@@ -188,7 +188,7 @@ export default function ProviderMealsPage() {
                 </div>
 
                 <textarea
-                  placeholder="Description"
+                    placeholder="Description"
                   value={form.description}
                   onChange={(e) =>
                     setForm({ ...form, description: e.target.value })
@@ -199,7 +199,7 @@ export default function ProviderMealsPage() {
 
                 <input
                   type="text"
-                  placeholder="Image URL"
+                    placeholder="Image URL"
                   value={form.image}
                   onChange={(e) =>
                     setForm({ ...form, image: e.target.value })
@@ -215,7 +215,7 @@ export default function ProviderMealsPage() {
                   className="w-full rounded border p-2"
                   required
                 >
-                  <option value="">Select Category *</option>
+                    <option value="">Select Category *</option>
                   {categoryData?.data?.map((category: any) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
@@ -232,8 +232,8 @@ export default function ProviderMealsPage() {
                     {createMutation.isPending || updateMutation.isPending
                       ? "Saving..."
                       : editingId
-                      ? "Update Meal"
-                      : "Add Meal"}
+                      ? "Update Product"
+                      : "Add Product"}
                   </button>
                   <button
                     type="button"
@@ -245,11 +245,11 @@ export default function ProviderMealsPage() {
                 </div>
               </form>
             ) : (
-              <button
+                <button
                 onClick={() => setShowForm(true)}
                 className="rounded bg-orange-500 px-6 py-2 text-white"
               >
-                + Add New Meal
+                + Add New Product
               </button>
             )}
           </div>
@@ -257,15 +257,15 @@ export default function ProviderMealsPage() {
           {/* Meals List */}
           <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-semibold mb-4 text-black">
-              Meals ({providerMeals.length})
+              Products ({providerMeals.length})
             </h2>
 
             {isLoading ? (
               <Loader />
             ) : isError ? (
-              <p className="text-gray-500">Failed to load meals.</p>
+              <p className="text-gray-500">Failed to load products.</p>
             ) : providerMeals.length === 0 ? (
-              <p className="text-gray-500">No meals found. Add your first meal!</p>
+              <p className="text-gray-500">No products found. Add your first product!</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
@@ -297,8 +297,8 @@ export default function ProviderMealsPage() {
                             </button>
                             <button
                               onClick={() => {
-                                if (confirm("Are you sure you want to delete this meal?")) {
-                                  deleteMutation.mutate(meal.id);
+                                  if (confirm("Are you sure you want to delete this product?")) {
+                                    deleteMutation.mutate(meal.id);
                                 }
                               }}
                               disabled={deleteMutation.isPending}

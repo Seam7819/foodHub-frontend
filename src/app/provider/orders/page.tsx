@@ -29,7 +29,7 @@ export default function ProviderOrdersPage() {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["provider-orders", user?.id],
     queryFn: () => getProviderOrders(),
-    enabled: !!user?.id,
+    enabled: !!user?.id && user?.role === "PROVIDER",
   });
 
   const updateStatusMutation = useMutation({

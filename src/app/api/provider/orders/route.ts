@@ -1,27 +1,23 @@
 import { NextResponse } from "next/server";
 import { orders } from "@/src/lib/orderStore";
+import { getUserIdFromAuth } from "@/src/lib/cartStore";
+import { users } from "@/src/lib/mockData";
 
-export async function GET() {
-  return NextResponse.json({ data: orders });
-}
+export async function GET(request: Request) {
+  const authHeader = request.headers.get("authorization") ?? request.headers.get("Authorization") ?? undefined;
+  const userId = getUserIdFromAuth(authHeader);
 
-export async function PATCH(request: Request) {
-  const body = await request.json();
-  const { id, status } = body || {};
-
-  if (!id || !status) {
-    return NextResponse.json({ message: "Order id and status are required." }, { status: 400 });
+  if (!userId) {
+    return NextResponse.json({ message: "Missing or invalid authorization token." }, { status: 401 });
   }
 
-  const index = orders.findIndex((order) => order.id === id);
-  if (index === -1) {
-    return NextResponse.json({ message: "Order not found." }, { status: 404 });
+  const user = users.find((u) => u.id === userId);
+
+  if (!user || user.role !== "PROVIDER") {
+    return NextResponse.json({ message: "Not authorized" }, { status: 403 });
   }
 
-  orders[index] = {
-    ...orders[index],
-    status,
-  };
-
-  return NextResponse.json({ data: orders[index] });
+  // Return orders for this provider
+  const providerOrders = orders.filter((o) => o.providerId === userId);
+  return NextResponse.json({ data: providerOrders });
 }

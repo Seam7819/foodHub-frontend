@@ -38,61 +38,88 @@ const getStatusColor = (status: string) => {
 export default function ProfilePage() {
   const { user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
 
-  useEffect(() => {
-    const loadOrders = async () => {
-      setLoading(true);
-      try {
-        const data = await getMyOrders();
-        setOrders(data.data || []);
-      } catch (error) {
-        console.error("Failed to load orders", error);
-      } finally {
-        setLoading(false);
+  const loadOrders = async () => {
+    setLoading(true);
+    try {
+      console.log("Loading orders for user:", user?.id);
+      const data = await getMyOrders();
+      console.log("Orders fetched:", data);
+      console.log("Orders count:", data.data?.length);
+      const loadedOrders = data.data || [];
+      setOrders(loadedOrders);
+      if (loadedOrders.length > 0) {
+        console.log("Orders loaded successfully");
       }
-    };
+    } catch (error) {
+      console.error("Failed to load orders:", error);
+      toast.error("Failed to load orders");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  // Load orders on initial mount
+  useEffect(() => {
+    console.log("Profile page mounted, loading orders...");
     loadOrders();
+  }, []);
+
+  // Reload orders when coming from checkout (refresh parameter in URL)
+  useEffect(() => {
+    const refresh = new URLSearchParams(window.location.search).get("refresh");
+    if (refresh === "true") {
+      console.log("Refresh=true detected in URL, reloading orders...");
+      loadOrders();
+      // Clean up URL
+      window.history.replaceState({}, "", "/profile");
+    }
   }, []);
 
   return (
     <ProtectedRoute>
       <RoleGuard role="CUSTOMER">
-        <div className="max-w-7xl mx-auto py-10 px-5 space-y-8">
-          <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-            <h1 className="text-4xl font-bold mb-2 text-black">My Profile</h1>
-            <p className="text-gray-600">
+        <div className="max-w-7xl mx-auto py-10 px-5 space-y-8 dark:bg-slate-900 min-h-screen">
+          <div className="rounded-xl border border-orange-200 bg-gradient-to-br from-white to-orange-50 p-8 shadow-md dark:from-slate-800 dark:to-slate-700 dark:border-orange-700">
+            <h1 className="text-4xl font-bold mb-2 text-orange-900 dark:text-orange-300">My Profile</h1>
+            <p className="text-orange-700 dark:text-orange-200 font-medium">
               Manage your account details and track your orders.
             </p>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 p-4">
-                <p className="text-sm text-gray-600">Name</p>
-                <p className="mt-1 text-lg font-semibold text-black">{user?.name || "-"}</p>
+              <div className="rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 p-4 shadow-md">
+                <p className="text-sm text-blue-100">Name</p>
+                <p className="mt-1 text-lg font-semibold text-white">{user?.name || "-"}</p>
               </div>
-              <div className="rounded-lg bg-gradient-to-br from-green-50 to-green-100 p-4">
-                <p className="text-sm text-gray-600">Email</p>
-                <p className="mt-1 text-lg font-semibold break-all text-sm text-black">
+              <div className="rounded-lg bg-gradient-to-br from-green-500 to-green-600 p-4 shadow-md">
+                <p className="text-sm text-green-100">Email</p>
+                <p className="mt-1 text-lg font-semibold break-all text-sm text-white">
                   {user?.email || "-"}
                 </p>
               </div>
-              <div className="rounded-lg bg-gradient-to-br from-purple-50 to-purple-100 p-4">
-                <p className="text-sm text-gray-600">Role</p>
-                <p className="mt-1 text-lg font-semibold text-black">{user?.role || "-"}</p>
+              <div className="rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 p-4 shadow-md">
+                <p className="text-sm text-purple-100">Role</p>
+                <p className="mt-1 text-lg font-semibold text-white">{user?.role || "-"}</p>
               </div>
-              <div className="rounded-lg bg-gradient-to-br from-orange-50 to-orange-100 p-4">
-                <p className="text-sm text-gray-600">Total Orders</p>
-                <p className="mt-1 text-lg font-semibold text-black">{orders.length}</p>
+              <div className="rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 p-4 shadow-md">
+                <p className="text-sm text-orange-100">Total Orders</p>
+                <p className="mt-1 text-lg font-semibold text-white">{orders.length}</p>
               </div>
             </div>
           </div>
 
-          <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold text-black">Order Tracking</h2>
-              {loading && <span className="text-sm text-gray-500">Loading...</span>}
+          <div className="rounded-xl border border-orange-200 bg-white p-8 shadow-md dark:bg-slate-800 dark:border-orange-700">
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <h2 className="text-2xl font-semibold text-orange-900 dark:text-orange-300">Order Tracking</h2>
+              <button
+                onClick={loadOrders}
+                disabled={loading}
+                className="px-4 py-2 bg-orange-500 text-white rounded-md font-semibold hover:bg-orange-600 disabled:opacity-50 transition"
+              >
+                {loading ? "Refreshing..." : "Refresh Orders"}
+              </button>
             </div>
 
             {loading && !orders.length ? (
@@ -100,34 +127,34 @@ export default function ProfilePage() {
                 <Loader />
               </div>
             ) : orders.length === 0 ? (
-              <div className="mt-6 rounded-xl border border-dashed border-gray-300 bg-gray-50 p-8 text-center">
-                <p className="text-gray-600 mb-4">No orders found yet.</p>
+              <div className="mt-6 rounded-xl border border-dashed border-orange-300 bg-orange-50 p-8 text-center dark:border-orange-700 dark:bg-slate-700">
+                <p className="text-orange-900 dark:text-orange-200 mb-4 font-medium">No orders found yet.</p>
                 <Link
-                  href="/meals"
-                  className="inline-block rounded-md bg-orange-500 px-6 py-2 text-white hover:bg-orange-600"
+                  href="/products"
+                  className="inline-block rounded-md bg-orange-500 px-6 py-2 text-white hover:bg-orange-600 font-semibold transition"
                 >
                   Start Ordering
                 </Link>
               </div>
             ) : (
-              <div className="mt-6 space-y-4 text-black">
+              <div className="mt-6 space-y-4 text-slate-900 dark:text-white">
                 {orders.map((order) => (
                   <div
                     key={order.id}
-                    className="rounded-xl border border-gray-200 p-5 hover:shadow-md transition"
+                    className="rounded-xl border border-orange-200 p-5 hover:shadow-lg transition bg-orange-50 dark:bg-slate-700 dark:border-orange-600"
                   >
                     <div className="flex items-start justify-between gap-4 flex-wrap">
                       <div className="flex-1 min-w-fit">
                         <div className="flex items-center gap-3 mb-3">
-                          <p className="text-sm text-gray-500">Order ID</p>
-                          <p className="font-mono text-sm font-medium">
+                          <p className="text-sm text-orange-700 dark:text-orange-200 font-medium">Order ID</p>
+                          <p className="font-mono text-sm font-bold text-slate-900 dark:text-white">
                             {order.id.substring(0, 8)}...
                           </p>
                         </div>
                         <div className="grid gap-2 text-sm">
                           <div>
-                            <span className="text-gray-500">Placed on:</span>{" "}
-                            <span className="font-medium">
+                            <span className="text-orange-700 dark:text-orange-200 font-medium">Placed on:</span>{" "}
+                            <span className="font-medium text-slate-800 dark:text-slate-100">
                               {new Date(order.createdAt).toLocaleDateString()} at{" "}
                               {new Date(order.createdAt).toLocaleTimeString([], {
                                 hour: "2-digit",
@@ -136,15 +163,15 @@ export default function ProfilePage() {
                             </span>
                           </div>
                           <div>
-                            <span className="text-gray-500">Total Amount:</span>{" "}
-                            <span className="font-bold text-orange-600">
+                            <span className="text-orange-700 dark:text-orange-200 font-medium">Total Amount:</span>{" "}
+                            <span className="font-bold text-orange-600 dark:text-orange-400">
                               ৳ {order.totalPrice}
                             </span>
                           </div>
                           {order.deliveryAddress && (
                             <div>
-                              <span className="text-gray-500">Delivery to:</span>{" "}
-                              <span className="font-medium">
+                              <span className="text-orange-700 dark:text-orange-200 font-medium">Delivery to:</span>{" "}
+                              <span className="font-medium text-slate-800 dark:text-slate-100">
                                 {order.deliveryAddress.substring(0, 40)}
                                 {order.deliveryAddress.length > 40 ? "..." : ""}
                               </span>
@@ -166,7 +193,7 @@ export default function ProfilePage() {
                               expandedOrder === order.id ? null : order.id
                             )
                           }
-                          className="text-gray-500 hover:text-gray-700"
+                          className="text-orange-700 dark:text-orange-300 hover:text-orange-900 dark:hover:text-orange-100 font-bold text-lg"
                         >
                           {expandedOrder === order.id ? "▼" : "▶"}
                         </button>
@@ -174,15 +201,15 @@ export default function ProfilePage() {
                     </div>
 
                     {expandedOrder === order.id && (
-                      <div className="mt-4 pt-4 border-t border-gray-200 space-y-3">
+                      <div className="mt-4 pt-4 border-t border-orange-200 dark:border-orange-600 space-y-3">
                         {order.items && order.items.length > 0 ? (
                           <div>
-                            <p className="font-semibold text-sm mb-2">Items:</p>
+                            <p className="font-semibold text-sm mb-2 text-slate-900 dark:text-white">Items:</p>
                             <div className="space-y-2">
                               {order.items.map((item, idx) => (
                                 <div
                                   key={idx}
-                                  className="flex justify-between text-sm text-gray-600"
+                                  className="flex justify-between text-sm text-slate-700 dark:text-slate-200"
                                 >
                                   <span>
                                     {item.mealName} x {item.quantity || 1}
@@ -193,13 +220,13 @@ export default function ProfilePage() {
                             </div>
                           </div>
                         ) : (
-                          <p className="text-sm text-gray-500">No items details</p>
+                          <p className="text-sm text-orange-700 dark:text-orange-200">No items details</p>
                         )}
 
                         {order.status === "DELIVERED" && (
                           <Link
-                            href="/meals"
-                            className="inline-block mt-3 rounded-md bg-orange-500 px-4 py-2 text-sm text-white hover:bg-orange-600"
+                            href="/products"
+                            className="inline-block mt-3 rounded-md bg-orange-500 px-4 py-2 text-sm text-white hover:bg-orange-600 font-semibold transition"
                           >
                             Leave Review
                           </Link>
@@ -219,7 +246,7 @@ export default function ProfilePage() {
                                 toast?.error?.("Failed to cancel order");
                               }
                             }}
-                            className="ml-3 inline-block mt-3 rounded-md bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600"
+                            className="ml-3 inline-block mt-3 rounded-md bg-red-500 px-4 py-2 text-sm text-white hover:bg-red-600 font-semibold transition"
                           >
                             Cancel Order
                           </button>

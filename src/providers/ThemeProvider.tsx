@@ -20,13 +20,17 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
     const initialTheme = (stored === "dark" || stored === "light") ? stored : (systemPrefersDark ? "dark" : "light");
 
     setTheme(initialTheme);
-    document.documentElement.dataset.theme = initialTheme;
+    if (typeof window !== "undefined") {
+      document.documentElement.dataset.theme = initialTheme;
+      document.documentElement.classList.toggle("dark", initialTheme === "dark");
+    }
   }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.localStorage.setItem("foodhub_theme", theme);
       document.documentElement.dataset.theme = theme;
+      document.documentElement.classList.toggle("dark", theme === "dark");
     }
   }, [theme]);
 

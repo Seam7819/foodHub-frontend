@@ -1,15 +1,5 @@
 import { NextResponse } from "next/server";
-import { meals } from "@/src/lib/mockData";
-
-let orders = [
-  {
-    id: "order-1",
-    items: [meals[0]],
-    total: meals[0].price,
-    status: "processing",
-    userId: "user-1",
-  },
-];
+import { orders } from "@/src/lib/orderStore";
 
 export async function GET(request: Request, ctx: any) {
   const params = await ctx.params;

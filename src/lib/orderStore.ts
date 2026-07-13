@@ -3,7 +3,7 @@ import { meals } from "@/src/lib/mockData";
 export type Order = {
   id: string;
   items: Array<any>;
-  total: number;
+  totalPrice: number;
   status: string;
   userId: string;
   providerId: string;
@@ -19,8 +19,8 @@ export const orders: Order[] = [
   {
     id: "order-1",
     items: [meals[0]],
-    total: meals[0].price,
-    status: "processing",
+    totalPrice: meals[0].price,
+    status: "PLACED",
     userId: "user-1",
     providerId: meals[0].providerId,
     deliveryAddress: "123 Example Avenue",

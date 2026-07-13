@@ -83,11 +83,21 @@ npm install
 
 ## Environment Variables
 
-Create `.env.local`
+Create `.env.local` from the example file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Then update `.env.local` with your values:
 
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
+STRIPE_SECRET_KEY=sk_test_your_secret_key
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
+
+> Keep `STRIPE_SECRET_KEY` secret and do not commit it to source control. `.env.local` is ignored by `.gitignore`, while `.env.local.example` can be safely committed.
 
 ### Vercel production deployment
 

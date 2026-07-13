@@ -33,7 +33,7 @@ export default function AssistantPage() {
       <div className="rounded-3xl border border-app bg-surface p-8 shadow-sm">
         <h1 className="text-4xl font-bold text-slate-900 dark:text-white">AI Assistant</h1>
         <p className="mt-3 text-slate-600 dark:text-slate-300">
-          Ask questions about services, teams, projects, or the OrgNest workflow.
+          Ask questions about services, teams, projects, or the FoodHub workflow.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-5">

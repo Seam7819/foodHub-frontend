@@ -32,8 +32,8 @@ export default function RootLayout({
 }
 
 export const metadata = {
-  title: "OrgNest",
-  description: "OrgNest helps organizations manage teams, services, and projects with modern workflows.",
+  title: "Cartora | Modern Product Marketplace",
+  description: "Cartora is a modern e-commerce marketplace where customers discover products and providers manage their catalog.",
   icons: {
     icon: "./favicon.png",
   },

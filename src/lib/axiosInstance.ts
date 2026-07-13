@@ -43,8 +43,11 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
 
-    // Keep the request path as provided (with or without leading slash).
-    // baseURL includes a trailing slash, so axios will correctly join paths.
+    // Normalize request URLs so axios joins with baseURL correctly.
+    // If baseURL ends with a slash, a leading slash on config.url would override the path.
+    if (config.url && typeof config.url === "string" && config.baseURL && config.url.startsWith("/")) {
+      config.url = config.url.slice(1);
+    }
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -90,7 +93,9 @@ axiosInstance.interceptors.response.use(
       }
 
       // eslint-disable-next-line no-console
-      console.error("API error:", apiError, error);
+      console.error("API error:", JSON.stringify(apiError, null, 2));
+      // eslint-disable-next-line no-console
+      console.error("Axios error details:", axios.isAxiosError(error) ? error.toJSON() : error);
     } catch (e) {
       // ignore logging failures
     }

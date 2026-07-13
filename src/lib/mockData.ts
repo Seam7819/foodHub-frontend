@@ -42,23 +42,23 @@ export const users: User[] = [
   {
     id: "user-1",
     name: "Anna Johnson",
-    email: "anna@orgnest.com",
+    email: "anna@foodhub.com",
     password: "password123",
     role: "CUSTOMER",
   },
   {
     id: "provider-1",
     name: "Dan Rivera",
-    email: "dan@orgnest.com",
+    email: "dan@foodhub.com",
     password: "provider123",
     role: "PROVIDER",
-    businessName: "OrgNest Consulting",
+    businessName: "FoodHub Consulting",
     address: "123 Business Ave",
   },
   {
     id: "admin-1",
     name: "Nina Brooks",
-    email: "admin@orgnest.com",
+    email: "admin@foodhub.com",
     password: "admin123",
     role: "ADMIN",
   },
@@ -75,7 +75,7 @@ export const providers: Provider[] = [
   {
     id: "provider-1",
     name: "Dan Rivera",
-    businessName: "OrgNest Consulting",
+    businessName: "FoodHub Consulting",
     description: "Executive and team consulting for modern organizations.",
     image:
       "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&q=80",
@@ -104,7 +104,7 @@ export const meals: Meal[] = [
     provider: {
       id: "provider-1",
       name: "Dan Rivera",
-      businessName: "OrgNest Consulting",
+      businessName: "FoodHub Consulting",
     },
   },
   {
@@ -136,7 +136,7 @@ export const meals: Meal[] = [
     provider: {
       id: "provider-1",
       name: "Dan Rivera",
-      businessName: "OrgNest Consulting",
+      businessName: "FoodHub Consulting",
     },
   },
 ];

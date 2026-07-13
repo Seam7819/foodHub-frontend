@@ -105,6 +105,9 @@ export default function CartPage() {
         return;
       }
 
+      // Store delivery address for success page
+      localStorage.setItem("cartora_delivery_address", address);
+
       await clearServerCart();
 
       for (const item of cart) {
@@ -124,14 +127,34 @@ export default function CartPage() {
       }
 
       window.location.href = session.url;
-    } catch (error: any) {
-      console.error("Full Error Object:", error);
-      console.error("Error Status:", error.response?.status);
-      console.error("Error Data:", error.response?.data);
-      console.error("Error Message:", error.message);
-      
-      if (error.response?.status === 403) {
+    } catch (error: unknown) {
+      const normalizedError =
+        error instanceof Error
+          ? error
+          : typeof error === "string"
+          ? new Error(error)
+          : new Error("An unknown checkout error occurred.");
+
+      const status =
+        (error as any)?.status ?? (error as any)?.response?.status ?? undefined;
+      const details =
+        (error as any)?.details ?? (error as any)?.response?.data ??
+        (error as any)?.response ?? error;
+
+      const logPayload = {
+        message: normalizedError.message,
+        status,
+        details,
+      };
+
+      console.error("Stripe checkout error:", logPayload);
+      console.error("Stripe checkout error payload:", JSON.stringify(logPayload, null, 2));
+      console.error("Raw error object:", error);
+
+      if (status === 403) {
         toast.error("You don't have permission to place orders. Please contact support.");
+      } else if (normalizedError.message.includes("Missing STRIPE_SECRET_KEY")) {
+        toast.error("Payment configuration is missing. Please contact support.");
       } else {
         toast.error("Failed to submit order. Try again.");
       }
@@ -149,7 +172,7 @@ export default function CartPage() {
         </div>
         <button
           type="button"
-          onClick={() => router.push("/meals")}
+          onClick={() => router.push("/products")}
           className="rounded bg-orange-500 px-4 py-2 text-white"
         >
           Continue Shopping

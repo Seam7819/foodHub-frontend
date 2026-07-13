@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { toast } from "sonner";
@@ -6,127 +6,182 @@ import { useRouter } from "next/navigation";
 import { loginUser } from "@/src/services/auth.service";
 import { useAuth } from "@/src/context/AuthContext";
 
+type LoginForm = {
+  email: string;
+  password: string;
+};
+
+type LoginErrors = Partial<Record<keyof LoginForm, string>>;
+
+type CredentialPreset = {
+  label: string;
+  email: string;
+  password: string;
+};
+
+const presets: CredentialPreset[] = [
+  { label: "Admin", email: "admin@example.com", password: "admin1234" },
+  { label: "Provider", email: "provider@example.com", password: "provider1234" },
+  { label: "Customer", email: "user@example.com", password: "user1234" },
+];
+
 const LoginPage = () => {
   const router = useRouter();
   const { setUser } = useAuth();
 
+  const [form, setForm] = useState<LoginForm>({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = useState<LoginErrors>({});
+  const [loading, setLoading] = useState(false);
 
+  const validate = (values: LoginForm) => {
+    const nextErrors: LoginErrors = {};
 
-  const [form, setForm] =
-    useState({
-      email: "",
-      password: "",
-    });
+    if (!values.email.trim()) {
+      nextErrors.email = "Email is required.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+      nextErrors.email = "Enter a valid email address.";
+    }
 
-  const handleSubmit =
-    async (
-      e: React.FormEvent
-    ) => {
-      e.preventDefault();
+    if (!values.password) {
+      nextErrors.password = "Password is required.";
+    } else if (values.password.length < 6) {
+      nextErrors.password = "Password must be at least 6 characters.";
+    }
 
-      try {
-        const res =
-          await loginUser(form);
+    return nextErrors;
+  };
 
-        localStorage.setItem(
-          "accessToken",
-          res.accessToken
-        );
+  const applyPreset = (preset: CredentialPreset) => {
+    setForm({ email: preset.email, password: preset.password });
+    setErrors({});
+  };
 
-        localStorage.setItem(
-          "refreshToken",
-          res.refreshToken
-        );
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-        localStorage.setItem(
-          "role",
-          res.user.role
-        );
+    const nextErrors = validate(form);
+    setErrors(nextErrors);
 
-        toast.success(
-          "Login successful"
-        );
+    if (Object.keys(nextErrors).length > 0) {
+      return;
+    }
 
-        setUser(res.user);
+    setLoading(true);
 
-        if (res.user.role === "ADMIN") {
-          router.push("/admin");
-        } else if (
-          res.user.role === "PROVIDER"
-        ) {
-          router.push(
-            "/provider/dashboard"
-          );
-        } else {
-          router.push("/profile");
-        }
-      } catch (error: any) {
-        console.log(
-          "FULL ERROR:",
-          JSON.stringify(
-            error?.response?.data,
-            null,
-            2
-          )
-        );
+    try {
+      const res = await loginUser(form);
 
-        const htmlResponse =
-          typeof error?.response?.data === "string" &&
-          error.response.data.trim().startsWith("<!DOCTYPE html>");
+      localStorage.setItem("accessToken", res.accessToken);
+      localStorage.setItem("refreshToken", res.refreshToken);
+      localStorage.setItem("role", res.user.role);
 
-        toast.error(
-          htmlResponse
-            ? "Login API route not found. Verify NEXT_PUBLIC_API_URL and that your backend is running."
-            : error?.response?.data?.message ||
-              "Login failed"
-        );
+      toast.success("Login successful");
+      setUser(res.user);
+
+      if (res.user.role === "ADMIN") {
+        router.push("/admin");
+      } else if (res.user.role === "PROVIDER") {
+        router.push("/provider/dashboard");
+      } else {
+        router.push("/profile");
       }
-    };
+    } catch (error: any) {
+      const htmlResponse =
+        typeof error?.response?.data === "string" &&
+        error.response.data.trim().startsWith("<!DOCTYPE html>");
+      const apiMessage =
+        error?.response?.data?.message ||
+        error?.response?.data ||
+        error?.message ||
+        "Login failed";
+
+      toast.error(
+        htmlResponse
+          ? "Login API route not found. Verify NEXT_PUBLIC_API_URL and that your backend is running."
+          : apiMessage
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="max-w-md mx-auto py-20 px-5">
-      <h1 className="text-3xl font-bold mb-8">
-        Login
-      </h1>
+    <div className="mx-auto max-w-md px-5 py-20">
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+        <p className="text-sm font-semibold uppercase tracking-[0.35em] text-orange-600">Welcome back</p>
+        <h1 className="mt-3 text-3xl font-bold text-slate-900 dark:text-white">Login</h1>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">Access your account and continue shopping.</p>
 
-      <form
-        onSubmit={
-          handleSubmit
-        }
-        className="space-y-4"
-      >
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full border p-3 rounded"
-          onChange={(e) =>
-            setForm({
-              ...form,
-              email:
-                e.target.value,
-            })
-          }
-        />
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {presets.map((preset) => (
+            <button
+              key={preset.label}
+              type="button"
+              onClick={() => applyPreset(preset)}
+              className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-semibold text-slate-800 transition hover:border-orange-400 hover:bg-orange-50 dark:border-slate-700 dark:bg-slate-950 dark:text-white dark:hover:bg-orange-500/10"
+            >
+              {preset.label}
+            </button>
+          ))}
+        </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full border p-3 rounded"
-          onChange={(e) =>
-            setForm({
-              ...form,
-              password:
-                e.target.value,
-            })
-          }
-        />
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5" noValidate>
+          <div>
+            <label htmlFor="login-email" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              Email address
+            </label>
+            <input
+              id="login-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              value={form.email}
+              placeholder="you@example.com"
+              aria-invalid={Boolean(errors.email)}
+              aria-describedby={errors.email ? "login-email-error" : undefined}
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-200 dark:border-slate-700 dark:bg-slate-900"
+              onChange={(e) => {
+                setForm((prev) => ({ ...prev, email: e.target.value }));
+                setErrors((prev) => ({ ...prev, email: undefined }));
+              }}
+            />
+            {errors.email && <p id="login-email-error" className="mt-2 text-sm text-red-600">{errors.email}</p>}
+          </div>
 
-        <button
-          className="w-full bg-orange-500 text-white py-3 rounded"
-        >
-          Login
-        </button>
-      </form>
+          <div>
+            <label htmlFor="login-password" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+              Password
+            </label>
+            <input
+              id="login-password"
+              name="password"
+              type="password"
+              autoComplete="current-password"
+              value={form.password}
+              placeholder="••••••••"
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={errors.password ? "login-password-error" : undefined}
+              className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-2 focus:ring-orange-200 dark:border-slate-700 dark:bg-slate-900"
+              onChange={(e) => {
+                setForm((prev) => ({ ...prev, password: e.target.value }));
+                setErrors((prev) => ({ ...prev, password: undefined }));
+              }}
+            />
+            {errors.password && <p id="login-password-error" className="mt-2 text-sm text-red-600">{errors.password}</p>}
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-xl bg-orange-600 px-4 py-3 font-semibold text-white transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {loading ? "Signing in..." : "Login"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

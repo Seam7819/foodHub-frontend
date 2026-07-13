@@ -7,15 +7,16 @@ import ProtectedRoute from "@/src/components/shared/ProtectedRoute";
 import RoleGuard from "@/src/components/shared/RoleGuard";
 import ProviderSidebar from "@/src/components/dashboard/ProviderSidebar";
 import { useAuth } from "@/src/context/AuthContext";
-import { getOrders } from "@/src/services/order.service";
+import { getProviderOrders } from "@/src/services/provider-order.service";
 import Loader from "@/src/components/shared/Loader";
 
 export default function ProviderDashboardPage() {
   const { user } = useAuth();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["orders", "provider"],
-    queryFn: getOrders,
+    queryKey: ["provider-orders", user?.id],
+    queryFn: getProviderOrders,
+    enabled: !!user?.id && user?.role === "PROVIDER",
   });
 
   const orders = data?.data || [];
@@ -34,7 +35,7 @@ export default function ProviderDashboardPage() {
             <div>
               <h1 className="text-4xl font-bold text-black">Provider Dashboard</h1>
               <p className="mt-2 text-orange-400">
-                Manage your meals and orders from here.
+                Manage your products and orders from here.
               </p>
             </div>
 
@@ -70,7 +71,7 @@ export default function ProviderDashboardPage() {
                     href="/provider/meals"
                     className="block w-full rounded bg-orange-500 px-4 py-3 text-white text-center hover:bg-orange-600"
                   >
-                    Manage Menu
+                    Manage Products
                   </Link>
                   <Link
                     href="/provider/orders"

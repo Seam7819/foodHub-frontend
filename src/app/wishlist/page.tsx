@@ -31,13 +31,13 @@ export default function WishlistPage() {
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-6">
         <div>
           <h1 className="text-3xl font-bold">Wishlist</h1>
-          <p className="text-gray-600">Saved meals you want to order later.</p>
+          <p className="text-gray-600">Saved products you want to order later.</p>
         </div>
         <Link
-          href="/meals"
+          href="/products"
           className="rounded bg-orange-500 px-4 py-2 text-white"
         >
-          Browse Meals
+          Browse Products
         </Link>
       </div>
 
@@ -69,7 +69,7 @@ export default function WishlistPage() {
               </div>
 
               <div className="flex flex-col items-end justify-between gap-3">
-                <Link href={`/meals/${item.id}`} className="rounded bg-orange-500 px-4 py-2 text-white">
+                <Link href={`/products/${item.id}`} className="rounded bg-orange-500 px-4 py-2 text-white">
                   View
                 </Link>
                 <button

@@ -96,7 +96,14 @@ const Navbar = () => {
 
           {user ? (
             <>
-              {user?.role === "PROVIDER" ? (
+              {user?.role === "ADMIN" ? (
+                <Link
+                  href="/admin"
+                  className={`hidden sm:inline text-xs md:text-sm font-semibold px-3 py-1 rounded-md transition ${isLight ? 'text-slate-800 hover:bg-orange-100' : 'text-white hover:bg-orange-700'}`}
+                >
+                  {user?.name}
+                </Link>
+              ) : user?.role === "PROVIDER" ? (
                 <Link
                   href="/provider/dashboard"
                   className={`hidden sm:inline text-xs md:text-sm font-semibold px-3 py-1 rounded-md transition ${isLight ? 'text-slate-800 hover:bg-orange-100' : 'text-white hover:bg-orange-700'}`}
@@ -109,6 +116,15 @@ const Navbar = () => {
                   className={`hidden sm:inline text-xs md:text-sm font-semibold px-3 py-1 rounded-md transition ${isLight ? 'text-slate-800 hover:bg-orange-100' : 'text-white hover:bg-orange-700'}`}
                 >
                   {user?.name}
+                </Link>
+              )}
+
+              {user?.role === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  className={`px-2 md:px-4 py-1 md:py-2 rounded-md text-xs md:text-sm font-semibold transition ${isLight ? 'bg-white text-orange-600 hover:bg-orange-50' : 'bg-white text-orange-600 hover:bg-orange-100'}`}
+                >
+                  Admin
                 </Link>
               )}
 

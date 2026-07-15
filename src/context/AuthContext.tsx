@@ -64,13 +64,6 @@ export const AuthProvider = ({
   }, []);
 
   const logout = () => {
-    if (user?.id) {
-      clearCart(user.id);
-      clearWishlist(user.id);
-    }
-
-    localStorage.removeItem("foodhub_cart");
-    localStorage.removeItem("foodhub_wishlist");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     localStorage.removeItem("role");

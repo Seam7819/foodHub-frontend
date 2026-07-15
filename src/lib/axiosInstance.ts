@@ -24,7 +24,9 @@ const resolveBaseUrl = () => {
   }
 
   if (typeof window !== "undefined") {
-    return `${window.location.origin}/api/`;
+    const origin = window.location.origin;
+    const normalizedOrigin = origin.replace(/:\d+$/, "");
+    return `${normalizedOrigin}:3000/api/`;
   }
 
   return "/api/";

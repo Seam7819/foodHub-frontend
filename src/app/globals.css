@@ -122,6 +122,50 @@ html.dark,
   background-color: var(--surface) !important;
 }
 
+/* Ensure white text remains readable in light theme by falling back to foreground color */
+[data-theme="light"] .text-white,
+[data-theme="light"] .text-gray-100,
+[data-theme="light"] .text-slate-100 {
+  color: var(--foreground) !important;
+}
+
+/* Ensure content inside light backgrounds is readable (headings, paragraphs, captions) */
+[data-theme="light"] .bg-white,
+[data-theme="light"] .bg-surface,
+[data-theme="light"] .bg-surface-muted,
+[data-theme="light"] .bg-slate-50,
+[data-theme="light"] .bg-gray-50,
+[data-theme="light"] .bg-gray-100,
+[data-theme="light"] .bg-slate-100,
+[data-theme="light"] .bg-app-bg {
+  color: var(--foreground) !important;
+}
+
+[data-theme="light"] .bg-white h1,
+[data-theme="light"] .bg-white h2,
+[data-theme="light"] .bg-white h3,
+[data-theme="light"] .bg-white h4,
+[data-theme="light"] .bg-white h5,
+[data-theme="light"] .bg-white h6,
+[data-theme="light"] .bg-white p,
+[data-theme="light"] .bg-white small,
+[data-theme="light"] .bg-white span,
+[data-theme="light"] .bg-white label,
+[data-theme="light"] .bg-white figcaption,
+[data-theme="light"] .bg-surface h1,
+[data-theme="light"] .bg-surface h2,
+[data-theme="light"] .bg-surface h3,
+[data-theme="light"] .bg-surface h4,
+[data-theme="light"] .bg-surface h5,
+[data-theme="light"] .bg-surface h6,
+[data-theme="light"] .bg-surface p,
+[data-theme="light"] .bg-surface small,
+[data-theme="light"] .bg-surface span,
+[data-theme="light"] .bg-surface label,
+[data-theme="light"] .bg-surface figcaption {
+  color: var(--foreground) !important;
+}
+
 [data-theme="dark"] .border-slate-200,
 [data-theme="dark"] .border-gray-200 {
   border-color: var(--border) !important;

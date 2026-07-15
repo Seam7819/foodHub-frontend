@@ -24,7 +24,7 @@ const MarketplaceStory = () => {
   return (
     <section className="py-16">
       <div className="mx-auto max-w-7xl px-5">
-        <div className="rounded-[2rem] border border-slate-200 bg-slate-950 px-6 py-10 text-white shadow-sm sm:px-10 lg:px-14">
+        <div className="rounded-[2rem] border border-slate-200 bg-surface px-6 py-10 text-slate-900 shadow-sm sm:px-10 lg:px-14 dark:bg-slate-950 dark:text-white">
           <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-orange-400">For merchants and shoppers</p>
@@ -48,7 +48,7 @@ const MarketplaceStory = () => {
             <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-6 backdrop-blur">
               <div className="grid gap-4 sm:grid-cols-2">
                 {trustPoints.map((point) => (
-                  <div key={point} className="rounded-2xl border border-white/10 bg-slate-900/60 p-4 text-sm text-slate-200">
+                  <div key={point} className="rounded-2xl border border-white/10 dark:bg-slate-900/60 dark:text-slate-200 bg-surface text-slate-900 p-4 text-sm">
                     {point}
                   </div>
                 ))}
@@ -56,7 +56,7 @@ const MarketplaceStory = () => {
 
               <div className="mt-6 space-y-4">
                 {steps.map((step, index) => (
-                  <div key={step.title} className="flex gap-3 rounded-2xl border border-white/10 bg-slate-900/50 p-4">
+                  <div key={step.title} className="flex gap-3 rounded-2xl border border-white/10 dark:bg-slate-900/50 bg-surface p-4">
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500 font-semibold text-white">
                       {index + 1}
                     </div>

@@ -20,9 +20,9 @@ type CredentialPreset = {
 };
 
 const presets: CredentialPreset[] = [
-  { label: "Admin", email: "admin@example.com", password: "admin1234" },
-  { label: "Provider", email: "provider@example.com", password: "provider1234" },
-  { label: "Customer", email: "user@example.com", password: "user1234" },
+  { label: "Admin", email: "admin@foodhub.com", password: "admin123" },
+  { label: "Provider", email: "dan@foodhub.com", password: "provider123" },
+  { label: "Customer", email: "anna@foodhub.com", password: "password123" },
 ];
 
 const LoginPage = () => {

@@ -41,7 +41,7 @@ const NewsletterCTA = () => {
                 placeholder="Enter your email"
                 className="w-full rounded-full border border-white/30 bg-white px-5 py-3 text-slate-900 outline-none"
               />
-              <button type="submit" disabled={loading} className="rounded-full bg-slate-950 px-5 py-3 font-semibold text-white transition hover:bg-slate-800 disabled:opacity-70">
+              <button type="submit" disabled={loading} className="rounded-full bg-white dark:bg-slate-950 px-5 py-3 font-semibold text-orange-600 dark:text-white transition hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-70">
                 {loading ? "Joining..." : "Subscribe"}
               </button>
             </form>

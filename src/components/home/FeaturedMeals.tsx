@@ -57,7 +57,7 @@ const FeaturedMeals = () => {
               {meals.map((meal: any, index: number) => (
                 <Link key={meal.id} href={`/products/${meal.id}`}>
                   <div className="group h-full overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-700 dark:bg-slate-950">
-                    <div className="relative h-56 overflow-hidden bg-slate-100 dark:bg-slate-900">
+                    <div className="relative h-44 sm:h-56 overflow-hidden bg-slate-100 dark:bg-slate-900">
                       {meal.image ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img

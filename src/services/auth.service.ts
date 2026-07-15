@@ -38,7 +38,7 @@ export const getMyProfile =
         "/auth/me",
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: token ? `Bearer ${token}` : undefined,
           },
         }
       );

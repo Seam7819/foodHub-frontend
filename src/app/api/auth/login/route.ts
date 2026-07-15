@@ -10,13 +10,24 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Email is required." }, { status: 400 });
     }
 
-    // Normalize email for robust matching (trim + lowercase)
+    // Normalize email for robust matching (trim + lowercase) and support the older demo aliases.
     const normalizedEmail = String(email).trim().toLowerCase();
-    let user: any = users.find((entry) => String(entry.email).trim().toLowerCase() === normalizedEmail);
+    const emailAliases: Record<string, string> = {
+      "admin@example.com": "admin@foodhub.com",
+      "provider@example.com": "dan@foodhub.com",
+      "user@example.com": "anna@foodhub.com",
+      "customer@example.com": "anna@foodhub.com",
+      "provider@foodhub.com": "dan@foodhub.com",
+      "admin@foodhub.com": "admin@foodhub.com",
+      "user@foodhub.com": "anna@foodhub.com",
+      "anna@example.com": "anna@foodhub.com",
+    };
+    const resolvedEmail = emailAliases[normalizedEmail] ?? normalizedEmail;
+    let user: any = users.find((entry) => String(entry.email).trim().toLowerCase() === resolvedEmail);
 
     // Debug log for development to help diagnose credential issues
     // eslint-disable-next-line no-console
-    console.log("Auth login attempt:", { email: normalizedEmail, providedPassword: !!password });
+    console.log("Auth login attempt:", { email: normalizedEmail, resolvedEmail, providedPassword: !!password });
 
     const isProd = process.env.NODE_ENV === "production";
     if (!user) {
@@ -26,15 +37,15 @@ export async function POST(request: Request) {
 
       // Create a simple mock user. If the email looks like a provider or admin, set the matching role.
       const nextId = `user-${users.length + 1}`;
-      const guessedRole: any = normalizedEmail.includes("admin")
+      const guessedRole: any = resolvedEmail.includes("admin")
         ? "ADMIN"
-        : normalizedEmail.includes("provider")
+        : resolvedEmail.includes("dan@foodhub") || resolvedEmail.includes("provider")
         ? "PROVIDER"
         : "CUSTOMER";
       const newUser = {
         id: nextId,
-        name: normalizedEmail.split("@")[0],
-        email: normalizedEmail,
+        name: resolvedEmail.split("@")[0],
+        email: resolvedEmail,
         password: String(password || "dev"),
         role: guessedRole,
         businessName: guessedRole === "PROVIDER" ? "FoodHub Services" : undefined,

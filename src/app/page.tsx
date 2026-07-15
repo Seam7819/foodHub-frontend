@@ -3,6 +3,7 @@ import FeaturedBenefits from "../components/home/FeaturedBenefits";
 import FeaturedMeals from "../components/home/FeaturedMeals";
 import FAQSection from "../components/home/FAQSection";
 import Hero from "../components/home/Hero";
+import CarouselClient from "../components/home/CarouselClient";
 import MarketplaceStory from "../components/home/MarketplaceStory";
 import NewsletterCTA from "../components/home/NewsletterCTA";
 import Providers from "../components/home/Providers";
@@ -11,12 +12,11 @@ import Testimonials from "../components/home/Testimonials";
 import WhyChooseUs from "../components/home/WhyChooseUs";
 import PromoStrip from "../components/shared/PromoStrip";
 import TrustBadges from "../components/shared/TrustBadges";
-
-
 export default function HomePage() {
   return (
     <>
       <PromoStrip />
+      <CarouselClient fullViewport={true} autoPlay={true} interval={2500} pauseOnHover={false} pauseOnFocus={false} allowSpaceToggle={false} />
       <Hero />
       <TrustBadges />
 

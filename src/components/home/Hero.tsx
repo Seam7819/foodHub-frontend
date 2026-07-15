@@ -90,7 +90,7 @@ const Hero = () => {
           </div>
 
           <div className="space-y-4">
-            <div className="rounded-4xl bg-slate-950 p-6 text-white shadow-2xl sm:p-8">
+            <div className="rounded-4xl bg-surface p-6 text-slate-900 shadow-2xl sm:p-8 dark:bg-slate-950 dark:text-white">
               <p className="text-sm uppercase tracking-[0.35em] text-orange-200">Flash deals</p>
               <h2 className="mt-4 text-3xl font-semibold">Top products with unbeatable prices</h2>
               <p className="mt-3 text-slate-300">

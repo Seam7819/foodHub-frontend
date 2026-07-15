@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { categories, meals, providers, users } from "@/src/lib/mockData";
 import { getUserIdFromAuth } from "@/src/lib/cartStore";
+import { generateMealId } from "@/src/lib/mealId";
 
 export async function GET() {
   return NextResponse.json({ data: meals });
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
   };
 
   const newMeal = {
-    id: `meal-${meals.length + 1}`,
+    id: generateMealId(meals),
     name,
     description,
     price: Number(price),

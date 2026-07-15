@@ -13,14 +13,15 @@ export async function POST(request: Request) {
     // Normalize email for robust matching (trim + lowercase) and support the older demo aliases.
     const normalizedEmail = String(email).trim().toLowerCase();
     const emailAliases: Record<string, string> = {
-      "admin@example.com": "admin@foodhub.com",
-      "provider@example.com": "dan@foodhub.com",
-      "user@example.com": "anna@foodhub.com",
-      "customer@example.com": "anna@foodhub.com",
-      "provider@foodhub.com": "dan@foodhub.com",
-      "admin@foodhub.com": "admin@foodhub.com",
-      "user@foodhub.com": "anna@foodhub.com",
-      "anna@example.com": "anna@foodhub.com",
+      "admin@example.com": "admin@example.com",
+      "provider@example.com": "provider@example.com",
+      "user@example.com": "user@example.com",
+      "customer@example.com": "user@example.com",
+      "provider@foodhub.com": "provider@example.com",
+      "admin@foodhub.com": "admin@example.com",
+      "user@foodhub.com": "user@example.com",
+      "anna@example.com": "user@example.com",
+      "dan@foodhub.com": "provider@example.com",
     };
     const resolvedEmail = emailAliases[normalizedEmail] ?? normalizedEmail;
     let user: any = users.find((entry) => String(entry.email).trim().toLowerCase() === resolvedEmail);

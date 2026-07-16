@@ -1,4 +1,5 @@
 import axios from "axios";
+import { addOrderToStore, replaceOrders } from "@/src/lib/orderStore";
 
 const isLocalhostUrl = (url?: string) => {
   if (!url) return false;
@@ -23,10 +24,6 @@ const resolveBaseUrl = () => {
     return envUrl.replace(/\/$/, "") + "/";
   }
 
-  if (process.env.NODE_ENV !== "production") {
-    return "http://localhost:5000/api/";
-  }
-
   return "/api/";
 };
 
@@ -41,7 +38,7 @@ const axiosInstance = axios.create({
 // Request interceptor to normalize URLs and add auth token
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("accessToken");
+    const token = typeof window !== "undefined" ? window.localStorage.getItem("accessToken") : null;
 
     // Normalize request URLs so axios joins with baseURL correctly.
     // If baseURL ends with a slash, a leading slash on config.url would override the path.
@@ -50,6 +47,7 @@ axiosInstance.interceptors.request.use(
     }
 
     if (token) {
+      config.headers = config.headers ?? {};
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -61,7 +59,22 @@ axiosInstance.interceptors.request.use(
 
 // Response interceptor to handle 401 errors
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    const orderUrl = response.config?.url ?? "";
+    const isOrderRequest = /^(orders|\/orders)(\/|$)/.test(orderUrl);
+
+    if (isOrderRequest && response.status >= 200 && response.status < 300) {
+      const payload = response.data?.data;
+
+      if (Array.isArray(payload)) {
+        replaceOrders(payload);
+      } else if (payload && typeof payload === "object" && "id" in payload) {
+        addOrderToStore(payload as any);
+      }
+    }
+
+    return response;
+  },
   (error) => {
     // Log detailed error to console to help diagnose deployment/runtime issues
     try {

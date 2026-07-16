@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/src/context/AuthContext";
 import axiosInstance from "@/src/lib/axiosInstance";
 import { clearCart } from "@/src/utils/cart";
 import { toast } from "sonner";
+import { createOrder } from "@/src/services/order.service";
 
 export default function StripeSuccessPage() {
   const router = useRouter();
@@ -14,9 +15,12 @@ export default function StripeSuccessPage() {
   const [orderCreated, setOrderCreated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [statusMessage, setStatusMessage] = useState("Processing your payment...");
+  const hasStartedRef = useRef(false);
 
   useEffect(() => {
-    const createOrder = async () => {
+    const handleOrderCreation = async () => {
+      if (hasStartedRef.current) return;
+      hasStartedRef.current = true;
       try {
         // Wait for auth to load
         if (authLoading) {
@@ -32,17 +36,14 @@ export default function StripeSuccessPage() {
           return;
         }
 
-        console.log("Creating order for user:", user.id);
+        console.log("[SUCCESS PAGE] Creating order for user:", user.id);
         setStatusMessage("Fetching your cart...");
 
-        // Get current cart from server
-        const cartResponse = await axiosInstance.get("/cart");
-        const cartData = cartResponse.data?.data;
-        
-        // Handle different response structures
-        const cartItems = Array.isArray(cartData) ? cartData : Array.isArray(cartResponse.data) ? cartResponse.data : [];
+        // Get cart items from localStorage (stored during checkout)
+        const storedCartJson = localStorage.getItem("cartora_checkout_items");
+        const cartItems = storedCartJson ? JSON.parse(storedCartJson) : [];
 
-        console.log("Cart items:", cartItems);
+        console.log("[SUCCESS PAGE] Cart items from localStorage:", cartItems);
 
         if (cartItems.length === 0) {
           console.log("Cart is empty, skipping order creation");
@@ -57,13 +58,26 @@ export default function StripeSuccessPage() {
         const deliveryAddress = localStorage.getItem("cartora_delivery_address") || "Not provided";
 
         // Create order with cart items
-        const totalPrice = cartItems.reduce(
-          (sum: number, item: any) => sum + (item.meal?.price || 0) * item.quantity,
+        type CartItem = {
+          mealId?: string;
+          meal?: {
+            name?: string;
+            price?: number;
+            providerId?: string;
+          };
+          quantity: number;
+        };
+
+        const cartItemsTyped = cartItems as CartItem[];
+
+        const totalPrice = cartItemsTyped.reduce(
+          (sum: number, item: CartItem) => sum + (item.meal?.price || 0) * item.quantity,
           0
         );
 
         const orderPayload = {
-          items: cartItems.map((item: any) => ({
+          userId: user.id,
+          items: cartItemsTyped.map((item: CartItem) => ({
             mealId: item.mealId,
             mealName: item.meal?.name || "Unknown Meal",
             quantity: item.quantity,
@@ -76,13 +90,17 @@ export default function StripeSuccessPage() {
         };
 
         console.log("Order payload:", orderPayload);
+        console.log("[SUCCESS PAGE] About to create order");
 
-        const orderResponse = await axiosInstance.post("/orders", orderPayload);
+        const orderResponse = await createOrder(orderPayload);
 
-        console.log("Order response:", orderResponse.data);
+        console.log("[SUCCESS PAGE] Order response:", orderResponse);
+        console.log("[SUCCESS PAGE] Order response?.data:", orderResponse?.data);
+        console.log("[SUCCESS PAGE] Order response?.data?.id:", orderResponse?.data?.id);
+        console.log("[SUCCESS PAGE] Order response?.data?.userId:", orderResponse?.data?.userId);
 
-        if (orderResponse.data?.data) {
-          console.log("Order created successfully:", orderResponse.data.data);
+        if (orderResponse?.data) {
+          console.log("[SUCCESS PAGE] Order created successfully:", orderResponse.data);
           setOrderCreated(true);
           setStatusMessage("✓ Order created successfully!");
           toast.success("Order created successfully!");
@@ -90,8 +108,9 @@ export default function StripeSuccessPage() {
           // Clear cart on server and locally
           try {
             await axiosInstance.delete("/cart");
-            // Clear local delivery address and local cart storage
+            // Clear local delivery address, stored cart items, and local cart storage
             localStorage.removeItem("cartora_delivery_address");
+            localStorage.removeItem("cartora_checkout_items");
             try {
               clearCart(user?.id);
             } catch (e) {
@@ -123,7 +142,7 @@ export default function StripeSuccessPage() {
     };
 
     if (!authLoading) {
-      createOrder();
+      handleOrderCreation();
     }
   }, [authLoading, user?.id, router]);
 

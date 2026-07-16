@@ -107,6 +107,8 @@ export default function CartPage() {
 
       // Store delivery address for success page
       localStorage.setItem("cartora_delivery_address", address);
+      // Store cart items for success page (since server cart will be cleared)
+      localStorage.setItem("cartora_checkout_items", JSON.stringify(cart));
 
       await clearServerCart();
 

@@ -1,4 +1,4 @@
-import { meals } from "@/src/lib/mockData";
+import { meals as products } from "@/src/lib/mockData";
 
 export type Order = {
   id: string;
@@ -18,11 +18,11 @@ export type Order = {
 export const orders: Order[] = [
   {
     id: "order-1",
-    items: [meals[0]],
-    totalPrice: meals[0].price,
+    items: [products[0]],
+    totalPrice: products[0].price,
     status: "PLACED",
     userId: "user-1",
-    providerId: meals[0].providerId,
+    providerId: products[0].providerId,
     deliveryAddress: "123 Example Avenue",
     createdAt: new Date().toISOString(),
   },

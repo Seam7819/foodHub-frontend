@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 type CarouselItem = {
@@ -35,24 +35,21 @@ const Carousel = ({
   const [liveMessage, setLiveMessage] = useState("");
 
   useEffect(() => {
-    // update live message for screen readers when slide changes
     if (items.length > 0) {
-      const it = items[current];
+      const it = items[current] ?? items[0];
       setLiveMessage(`Slide ${current + 1} of ${items.length}: ${it.title}`);
     }
 
-    if (!autoPlay || items.length === 0) return;
-    if (isPaused) return;
+    if (!autoPlay || items.length === 0 || isPaused) return;
 
-    const timer = setInterval(() => {
+    const timer = window.setInterval(() => {
       setCurrent((prev) => (prev + 1) % items.length);
     }, interval);
 
-    return () => clearInterval(timer);
-  }, [autoPlay, interval, items.length, isPaused]);
+    return () => window.clearInterval(timer);
+  }, [autoPlay, interval, items, current, isPaused]);
 
   useEffect(() => {
-    // reset current when items change
     setCurrent(0);
   }, [items]);
 
@@ -63,7 +60,7 @@ const Carousel = ({
 
   return (
     <div
-      className={`relative w-full ${fullViewport ? "h-screen" : "h-72 sm:h-96"} bg-gray-900 rounded-xl overflow-hidden`}
+      className={`relative w-full ${fullViewport ? "h-screen" : "h-72 sm:h-96"} overflow-hidden rounded-xl bg-gray-900"`}
       role="region"
       aria-label="Homepage carousel"
       tabIndex={0}
@@ -77,49 +74,57 @@ const Carousel = ({
       onFocus={() => pauseOnFocus && setIsPaused(true)}
       onBlur={() => pauseOnFocus && setIsPaused(false)}
     >
-      <span className="sr-only" aria-live="polite">{liveMessage}</span>
-      {/* Slides (all rendered, fade between them) */}
-      {items.map((it, idx) => (
-        <div
-          key={it.id}
-          className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
-            idx === current ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
-          }`}
-          aria-hidden={idx === current ? "false" : "true"}
-        >
-          {it.image ? (
-            <img src={it.image} alt={it.title} className="w-full h-full object-cover" />
-          ) : (
-            <div className="w-full h-full bg-gray-700" />
-          )}
+      <span className="sr-only" aria-live="polite">
+        {liveMessage}
+      </span>
 
-          <div className="absolute inset-0 bg-black/40" />
+      {items.map((it, idx) => {
+        const isActive = idx === current;
 
-          <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-5">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3">{it.title}</h2>
-              <p className="text-base sm:text-lg mb-6 max-w-2xl">{it.description}</p>
-            {it.link && (
-              <Link href={it.link} className="px-8 py-3 bg-orange-500 rounded-lg hover:bg-orange-600 font-semibold transition">
-                Explore Now
-              </Link>
+        return (
+          <div
+            key={it.id}
+            className={`absolute inset-0 transition-opacity duration-300 ease-in-out ${
+              isActive ? "z-10 opacity-100" : "pointer-events-none z-0 opacity-0"
+            }`}
+            aria-hidden={isActive ? "false" : "true"}
+          >
+            {it.image ? (
+              <img src={it.image} alt={it.title} className="h-full w-full object-cover" />
+            ) : (
+              <div className="h-full w-full bg-gray-700" />
             )}
-          </div>
-        </div>
-      ))}
 
-      {/* Navigation Buttons */}
+            <div className="absolute inset-0 bg-black/45" />
+
+            <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center text-white">
+              <h2 className="mb-3 text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl">{it.title}</h2>
+              <p className="mb-6 max-w-2xl text-base sm:text-lg">{it.description}</p>
+              {it.link && (
+                <Link
+                  href={it.link}
+                  className="rounded-lg bg-orange-500 px-8 py-3 font-semibold transition hover:bg-orange-600"
+                >
+                  Explore Now
+                </Link>
+              )}
+            </div>
+          </div>
+        );
+      })}
+
       {items.length > 1 && (
         <>
           <button
             onClick={prev}
-            className="absolute left-5 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition"
+            className="absolute left-5 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition hover:bg-black/70"
             aria-label="Previous slide"
           >
             ←
           </button>
           <button
             onClick={next}
-            className="absolute right-5 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition"
+            className="absolute right-5 top-1/2 z-20 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition hover:bg-black/70"
             aria-label="Next slide"
           >
             →
@@ -127,14 +132,13 @@ const Carousel = ({
         </>
       )}
 
-      {/* Dots Indicator */}
       {items.length > 1 && (
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        <div className="absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 gap-2">
           {items.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrent(index)}
-              className={`w-3 h-3 rounded-full transition ${index === current ? "bg-orange-500" : "bg-white/50"}`}
+              className={`h-3 w-3 rounded-full transition ${index === current ? "bg-orange-500" : "bg-white/50"}`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}

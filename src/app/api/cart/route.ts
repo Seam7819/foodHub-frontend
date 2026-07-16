@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { meals } from "@/src/lib/mockData";
+import { meals as products } from "@/src/lib/mockData";
 import { carts, getUserIdFromAuth } from "@/src/lib/cartStore";
 
 export async function POST(request: Request) {
@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "mealId and quantity required" }, { status: 400 });
   }
 
-  const meal = meals.find((m) => m.id === mealId || m.id === `meal-${mealId}`);
+  const meal = products.find((m) => m.id === mealId || m.id === `meal-${mealId}`);
 
   const item = {
     id: `cart-${Date.now()}`,

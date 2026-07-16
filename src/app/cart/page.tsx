@@ -4,8 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useAuth } from "@/src/context/AuthContext";
-import { addToCart as addCartItemServer, clearServerCart } from "@/src/services/cart.service";
-import { createCheckoutSession } from "@/src/services/stripe.service";
+import axiosInstance from "@/src/lib/axiosInstance";
 import {
   CartItem,
   clearCart as clearCartStorage,
@@ -107,28 +106,28 @@ export default function CartPage() {
 
       // Store delivery address for success page
       localStorage.setItem("cartora_delivery_address", address);
-      // Store cart items for success page (since server cart will be cleared)
-      localStorage.setItem("cartora_checkout_items", JSON.stringify(cart));
 
-      await clearServerCart();
-
-      for (const item of cart) {
-        await addCartItemServer({
-          mealId: item.id,
-          quantity: item.quantity,
-        });
-      }
-
-      const session = await createCheckoutSession({
+      // Call backend to create order and get payment intent
+      console.log("[CART] Creating order with backend...");
+      const orderResponse = await axiosInstance.post("/orders", {
         deliveryAddress: address,
-        items: cart,
       });
 
-      if (!session?.url) {
-        throw new Error("Unable to start Stripe checkout. Please try again.");
+      console.log("[CART] Order created, response:", orderResponse.data);
+
+      const { clientSecret } = orderResponse.data?.data || {};
+
+      if (!clientSecret) {
+        throw new Error("Failed to get payment intent. Please try again.");
       }
 
-      window.location.href = session.url;
+      // Store client secret for success page
+      localStorage.setItem("cartora_payment_intent_client_secret", clientSecret);
+
+      // Redirect to Stripe payment page
+      // For now, just show success message (in production, you'd use Stripe Elements)
+      toast.success("Order created! Redirecting to payment...");
+      router.push("/stripe/success");
     } catch (error: unknown) {
       const normalizedError =
         error instanceof Error
@@ -149,16 +148,14 @@ export default function CartPage() {
         details,
       };
 
-      console.error("Stripe checkout error:", logPayload);
-      console.error("Stripe checkout error payload:", JSON.stringify(logPayload, null, 2));
+      console.error("Order creation error:", logPayload);
+      console.error("Order creation error payload:", JSON.stringify(logPayload, null, 2));
       console.error("Raw error object:", error);
 
-      if (status === 403) {
-        toast.error("You don't have permission to place orders. Please contact support.");
-      } else if (normalizedError.message.includes("Missing STRIPE_SECRET_KEY")) {
-        toast.error("Payment configuration is missing. Please contact support.");
+      if (status === 400) {
+        toast.error("Your cart is empty. Please add items to cart.");
       } else {
-        toast.error("Failed to submit order. Try again.");
+        toast.error("Failed to create order. Please try again.");
       }
     } finally {
       setIsSubmitting(false);

@@ -107,7 +107,7 @@ export default function CartPage() {
       // Store delivery address for success page
       localStorage.setItem("cartora_delivery_address", address);
 
-      // Call backend to create order and get payment intent
+      // Call backend to create order and get checkout URL
       console.log("[CART] Creating order with backend...");
       const orderResponse = await axiosInstance.post("/orders", {
         deliveryAddress: address,
@@ -115,19 +115,16 @@ export default function CartPage() {
 
       console.log("[CART] Order created, response:", orderResponse.data);
 
-      const { clientSecret } = orderResponse.data?.data || {};
+      const { checkoutUrl } = orderResponse.data?.data || {};
 
-      if (!clientSecret) {
-        throw new Error("Failed to get payment intent. Please try again.");
+      if (!checkoutUrl) {
+        throw new Error("Failed to create Stripe checkout. Please try again.");
       }
 
-      // Store client secret for success page
-      localStorage.setItem("cartora_payment_intent_client_secret", clientSecret);
-
-      // Redirect to Stripe payment page
-      // For now, just show success message (in production, you'd use Stripe Elements)
-      toast.success("Order created! Redirecting to payment...");
-      router.push("/stripe/success");
+      console.log("[CART] Redirecting to Stripe checkout:", checkoutUrl);
+      
+      // Redirect to Stripe Checkout
+      window.location.href = checkoutUrl;
     } catch (error: unknown) {
       const normalizedError =
         error instanceof Error
